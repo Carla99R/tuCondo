@@ -6,7 +6,6 @@ const HomePage =()=> {
     return(
         <>
             <NavBar/>
-            <h1>Coño</h1>
         </>
 
     )

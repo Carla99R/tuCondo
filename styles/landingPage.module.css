@@ -1,0 +1,61 @@
+
+.items{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 100%;
+    height: 50%;
+
+}
+
+.brand{
+    height: 100%;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 50%;
+    width: 100%;
+}
+
+.imagen{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.links{
+    font-size: 1.1em;
+    display: flex;
+    width: 35%;
+    justify-content: space-between;
+    color:darkgrey;
+    padding-right: 5%;
+}
+
+#inicio:hover{
+    border-bottom: 1px black solid;
+}
+
+#inicio:focus{
+    border-bottom: 1px black solid;
+}
+
+#nosotros:hover{
+    border-bottom: 1px black solid;
+}
+
+#nosotros:focus{
+    border-bottom: 1px black solid;
+}
+
+#info:hover{
+    border-bottom: 1px black solid;
+}
+
+#info:focus{
+    border-bottom: 1px black solid;
+}
+
