@@ -1,14 +1,16 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Navbar, NavLink, Nav } from 'react-bootstrap'
+import { Navbar, Nav } from 'react-bootstrap'
+import Link from 'next/link'
 import styles from '../styles/landingPage.module.css'
 import Image from 'next/image'
-
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import classnames from "classnames";
 
 const NavBar =() =>{
     return <>
             <Navbar className={styles.items}>
-                <Navbar.Brand href="#inicio" className={styles.brand}>
+                <Navbar.Brand href="Inicio" className={styles.brand}>
                     <figure className={styles.logo}>
                         <Image src="/logotipo.png" alt="logo" className={styles.imagen}
                                width={90}
@@ -16,13 +18,20 @@ const NavBar =() =>{
                         />
                     </figure>
                 </Navbar.Brand>
-                <Nav className="mr-auto" className={styles.links}>
-                    <NavLink href="#Inicio" id={styles.inicio}>Inicio</NavLink>
-                    <NavLink href="#nosotros" id={styles.nosotros}>Nosotros</NavLink>
-                    <NavLink href="#informacion" id={styles.info}>Información</NavLink>
+                <Nav className={classnames(`mr-auto, ${styles.links}`)}>
+                    <Link href="/" scroll={true}>
+                        <a id={styles.inicio}>Inicio</a>
+                    </Link>
+                    <Link href="/Nosotros" scroll={true}>
+                        <a id={styles.nosotros}>Nosotros</a>
+                    </Link>
+                    <Link href="/Informacion" scroll={true}>
+                        <a id={styles.info}>Informacion</a>
+                    </Link>
+                    <AccountCircle className={styles.login} fontSize={"large"}/>
+
                 </Nav>
             </Navbar>
-
 
     </>
 }

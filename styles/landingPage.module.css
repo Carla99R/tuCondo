@@ -2,7 +2,6 @@
 .items{
     display: flex;
     justify-content: space-between;
-    cursor: pointer;
     width: 100%;
     height: 50%;
 
@@ -10,6 +9,7 @@
 
 .brand{
     height: 100%;
+    cursor: pointer;
 }
 
 .logo{
@@ -29,33 +29,43 @@
 .links{
     font-size: 1.1em;
     display: flex;
-    width: 35%;
+    width: 50%;
     justify-content: space-between;
     color:darkgrey;
     padding-right: 5%;
 }
 
-#inicio:hover{
-    border-bottom: 1px black solid;
+#inicio{
+    cursor: pointer;
+    color:darkgrey;
 }
 
 #inicio:focus{
-    border-bottom: 1px black solid;
+    color: rgba(103,103,103,0.98);
 }
 
-#nosotros:hover{
-    border-bottom: 1px black solid;
+#nosotros{
+    cursor: pointer;
+    color:darkgrey;
 }
 
 #nosotros:focus{
-    border-bottom: 1px black solid;
+    color:  rgba(103,103,103,0.98);
 }
 
-#info:hover{
-    border-bottom: 1px black solid;
+#info{
+    cursor: pointer;
+    color:darkgrey;
 }
 
 #info:focus{
-    border-bottom: 1px black solid;
+    color:  rgba(103,103,103,0.98);
 }
 
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+}

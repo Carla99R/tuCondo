@@ -1,11 +1,11 @@
 import React from 'react';
-import NavBar from '../components/navbar'
+import Inicio from '../pages/Inicio'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const HomePage =()=> {
     return(
         <>
-            <NavBar/>
+            <Inicio/>
         </>
 
     )

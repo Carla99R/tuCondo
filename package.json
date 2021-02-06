@@ -8,7 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/icons": "^4.11.2",
     "bootstrap": "^4.6.0",
+    "classnames": "^2.2.6",
+    "materialize-css": "^1.0.0-rc.2",
     "next": "10.0.6",
     "next-images": "^1.7.0",
     "react": "17.0.1",
