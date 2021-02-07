@@ -8,14 +8,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
+    "jquery": "^1.9.1",
     "materialize-css": "^1.0.0-rc.2",
     "next": "10.0.6",
     "next-images": "^1.7.0",
+    "popper.js": "^1.16.1",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.3",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "webpack": "^4.46.0"
   }
 }
