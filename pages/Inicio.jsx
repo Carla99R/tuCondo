@@ -1,20 +1,23 @@
 import Navbar from '../components/navbar';
 import Image from 'next/image'
+import styles from '../styles/landingPage.module.css'
 
 const Inicio=()=>{
 
     return(
         <>
-            <Navbar/>
-            
-                
-            <Image 
-                src = "/unnamed.jpg" 
-                alt ="imagen"
-                height = "100vh"
-            />
+            <div className={styles.orden}>
+                <Image className={styles.fondo}
+                       src = "/fondo.jpg"
+                       alt ="imagen"
+                       layout= "fill"
+                />
+                <Navbar/>
 
-            <p>Comodidad para tu hogar</p>
+            </div>
+
+
+            {/*<p>Comodidad para tu hogar</p>*/}
 
         </>
     )

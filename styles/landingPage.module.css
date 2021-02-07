@@ -4,6 +4,8 @@
     justify-content: space-between;
     width: 100%;
     height: 50%;
+    background-color: transparent;
+    padding: 0;
 
 }
 
@@ -23,7 +25,6 @@
 .imagen{
     display: flex;
     justify-content: flex-start;
-    width: 100%;
 }
 
 .links{
@@ -37,29 +38,29 @@
 
 #inicio{
     cursor: pointer;
-    color:darkgrey;
+    color:rgba(103,103,103,0.98);
 }
 
 #inicio:focus{
-    color: rgba(103,103,103,0.98);
+    color: black;
 }
 
 #nosotros{
     cursor: pointer;
-    color:darkgrey;
+    color:rgba(103,103,103,0.98);
 }
 
 #nosotros:focus{
-    color:  rgba(103,103,103,0.98);
+    color:  black;
 }
 
 #info{
     cursor: pointer;
-    color:darkgrey;
+    color:rgba(103,103,103,0.98);
 }
 
 #info:focus{
-    color:  rgba(103,103,103,0.98);
+    color: black;
 }
 
 .login{
@@ -68,4 +69,32 @@
     justify-content: center;
     height: 100%;
     cursor: pointer;
+}
+
+.fondo{
+    height: 100vh;
+    width: 100%;
+    opacity: 0.5;
+}
+
+.orden{
+    display: flex;
+    flex-direction: column;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+}
+
+.boton{
+    border: none;
+    background-color: #00c2cb;
+    border-radius: 10px;
+    padding: 2%;
+}
+.inicio{
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 3%;
 }
