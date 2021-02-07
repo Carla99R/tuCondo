@@ -1,0 +1,9 @@
+.orden{
+    display: flex;
+    flex-direction: column;
+}
+
+.imagen{
+    display: flex;
+    justify-content: flex-start;
+}

@@ -6,8 +6,10 @@ import styles from '../styles/landingPage.module.css'
 import Image from 'next/image'
 import classnames from "classnames";
 import TransitionsModal from "./modal";
+import {useRouter} from "next/router";
 
 const NavBar =() =>{
+
     return <>
             <Navbar className={styles.items}>
                 <Navbar.Brand href="Inicio" className={styles.brand}>
