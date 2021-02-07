@@ -11,6 +11,7 @@ const Inicio=()=>{
             <Image 
                 src = "/unnamed.jpg" 
                 alt ="imagen"
+                height = "100vh"
             />
 
             <p>Comodidad para tu hogar</p>
