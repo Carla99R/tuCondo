@@ -17,6 +17,9 @@ models.sequelize.sync() // sincroniza modelos con BD
 
 // GraphQL  
 // typeDefs
+import resolvers from './graphQL/resolvers/resolvers'
+
+
 const typeDefs = gql`
 
     type Query{
@@ -26,6 +29,9 @@ const typeDefs = gql`
 `; // no segura si esta comilla
 
 // Resolvers
+
+import typeDefs from './graphQL/typeDefs/typeDefs'
+
 const resolvers = { 
 
     Query: {
@@ -39,7 +45,7 @@ const app = express();
 server.applyMiddleware( {app} );
 
 app.listen( {port: 4000}, () => {
-    console.log("Corriendo Servidor Apollo en http://localhost:4000" + server.graphqlPath)
+    console.log("Corriendo Servidor Apollo en http://localhost:4000"+server.graphqlPath)
 
 })// no estoy segura si colocar el 4000 asi decia la prepa
 
