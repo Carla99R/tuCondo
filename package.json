@@ -11,8 +11,10 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "apollo-server-express": "^2.19.2",
     "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
+    "express": "^4.17.1",
     "jquery": "^1.9.1",
     "materialize-css": "^1.0.0-rc.2",
     "mysql2": "^2.2.5",

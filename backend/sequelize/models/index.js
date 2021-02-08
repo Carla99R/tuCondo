@@ -8,7 +8,11 @@ const sequelize = new Sequelize('bw7tqizybep4admvmlft', 'ustwyqqfenyhghpo', '3Pv
 })
 
 const models ={
-    usuario: sequelize.import('./usuario')
+    usuario: sequelize.import('./usuario'),
+    edificio: sequelize.import('./edificio'),
+    condominio: sequelize.import('./condominio'),
+    apartamento: sequelize.import('./apartamento')
+
 }
 
 models.sequelize = sequelize
