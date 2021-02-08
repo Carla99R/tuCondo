@@ -1,3 +1,10 @@
+//TypeDefinitions
+const typeDefs = require('./backend/graphQl/typeDefs/typeDefs')
+//Resolver
+const resolvers = require('./backend/graphQl/resolvers/resolvers')
+
+
+
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express')
 
@@ -14,27 +21,12 @@ models.sequelize.sync() // sincroniza modelos con BD
 
 
 // GraphQL
-//TypeDefinitios
-const typeDefs = gql` 
-
-    type Query{
-        hello : String
-    }
-`;
-
-
-//Resolver
-const resolvers = {
-    Query : {
-        hello: ()=> "Hello World"
-    }
-}
 
 
 const server = new ApolloServer({typeDefs, resolvers, context: {models}})
 const app = express();
 server.applyMiddleware({app});
 
-app.listen({port: 4000}, () => {
-    console.log("Corriendo servidor Apollo en http://localhost:4000" + server.graphqlPath)
+app.listen({port: 5000}, () => {
+    console.log("Corriendo servidor Apollo en http://localhost:5000" + server.graphqlPath)
 })

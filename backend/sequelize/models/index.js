@@ -2,8 +2,9 @@
 
 import Sequelize from 'sequelize'
 
-const sequelize = new Sequelize('bw7tqizybep4admvmlft', 'ustwyqqfenyhghpo', '3PvX9AsdWmUzlgTiKCyH',{
-        host: 'bw7tqizybep4admvmlft-mysql.services.clever-cloud.com',
+const sequelize = new Sequelize('tucondo', 'root', 'Carlyta99!!',{
+        host: '127.0.0.1',
+        port:'3307',
         dialect: 'mysql'
 })
 
