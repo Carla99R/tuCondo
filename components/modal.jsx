@@ -7,6 +7,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import styles from "../styles/landingPage.module.css";
 import { useForm } from "react-hook-form";
 import MaskInput from "./MaskInput";
+import {TextField} from "@material-ui/core";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -38,7 +40,7 @@ export default function TransitionsModal() {
         setOpen(false);
     };
 
-    const {register, handleSubmit, errors} = useForm({
+    const {register, handleSubmit} = useForm({
         reValidateMode:'onSubmit'
     });
 
@@ -69,7 +71,9 @@ export default function TransitionsModal() {
             ...data,
             [e.target.name] : e.target.value
         })
-        console.log(...data)
+        console.log(data.password)
+        console.log(data.correo)
+
     }
 
 
@@ -98,45 +102,34 @@ export default function TransitionsModal() {
 
 
                                 <form onSubmit={handleSubmit(onSubmit)} id="transition-modal-description"
-                                      className={`${classes.root}, ${styles.form}`}>
-                                    <div className="input-field col s12">
-                                        <MaskInput
-                                            name={"correo"}
-                                            type={"text"}
-                                            id={"correo"}
-                                            onChange={handleChange}
-                                            ref={register({
-                                                required: {value: true, message: "Correo obligatorio"}
-                                            })}
+                                      className={`${classes.root} ${styles.form}`}>
+                                    <div>
+                                        <TextField label="Correo:" className={"col s12"}
+                                                   name={"correo"}
+                                                    ref={register({
+                                                        required: {value: true, message: "Correo obligatorio"}
+                                                    })}
+                                                   onChange={handleChange}
                                         />
-                                        <label htmlFor="correo">Correo</label>
-                                        <span className="helper-text invalid" data-error="wrong">
-                                        {errors?.correo && errors?.correo.message}
-                                    </span>
-
                                     </div>
-                                    <div className="input-field col s12" id="standard-password-input">
-                                        <MaskInput
-                                            name={"password"}
-                                            type={"password"}
-                                            id={"password"}
-                                            onChange={handleChange}
-                                            ref={register({
-                                                required: {value: true, message: "Contraseña obligatoria"}
-                                            })}
+
+                                    <div>
+                                        <TextField label="Contraseña:" className={"col s12"} id="standard-password-input" type="password"
+                                                   name={"password"}
+                                                   ref={register({
+                                                       required: {value: true, message: "Contraseña obligatoria"}
+                                                   })}
+                                                   onChange={handleChange}
                                         />
-                                        <label htmlFor="password">Contraseña</label>
-                                        <span className="helper-text invalid" data-error="wrong">
-                                        {errors?.password && errors?.password.message}
-                                    </span>
 
                                     </div>
 
                                     <div className={styles.inicio}>
-                                        <button className={styles.boton}>
-                                            Iniciar sesión
-                                        </button>
-
+                                        <Link href="/adminCondominio">
+                                            <button className={styles.boton}>
+                                                Iniciar sesión
+                                            </button>
+                                        </Link>
                                     </div>
 
                                 </form>

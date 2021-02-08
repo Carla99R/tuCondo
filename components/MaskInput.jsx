@@ -7,6 +7,7 @@ const MaskInput = ({register, ...object}) =>{
         id: object.id,
         type: object.type,
         name: object.name,
+        placeholder: object.name
     };
 
     return(
