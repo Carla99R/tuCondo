@@ -9,8 +9,8 @@ const resolvers ={
         },
     },
     Mutation: {
-        async createUsuario(root, {nombre, apellido, is_admin, correo},{models}){
-            return await models.usuario.create({nombre, apellido, is_admin, correo})
+        async createUsuario(root, {nombre, apellido, is_admin, correo, cedula},{models}){
+            return await models.usuario.create({nombre, apellido, is_admin, correo, cedula})
         }
     }
 
