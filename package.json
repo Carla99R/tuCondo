@@ -9,12 +9,14 @@
     "watch": "nodemon server.js --ext js, graphql --exec babel-node"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.9",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "apollo-server-express": "^2.19.2",
     "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
     "express": "^4.17.1",
+    "graphql": "^15.5.0",
     "jquery": "^1.9.1",
     "materialize-css": "^1.0.0-rc.2",
     "mysql2": "^2.2.5",
