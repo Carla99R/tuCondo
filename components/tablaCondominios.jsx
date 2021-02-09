@@ -32,8 +32,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
             protein,
             price,
             history: [
-                {date: '2020-01-05', customerId: '11091700', amount: 3},
-                {date: '2020-01-02', customerId: 'Anonymous', amount: 1},
+                {date: "Tus rosas", customerId: '2B', amount: 3},
+                {date: "Tus petalos", customerId: '7A', amount: 1},
             ],
         };
     }
@@ -95,11 +95,9 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
     };
 
     const rows = [
-        createData('Frozen yoghurt', 159),
-        createData('Ice cream sandwich', 237),
-        createData('Eclair', 262),
-        createData('Cupcake', 305),
-        createData('Gingerbread', 356),
+        createData('TuCondo', 159),
+        createData('MiCondo', 237),
+        createData('NuestroCondo', 262)
     ];
 
     export default function CollapsibleTable() {
@@ -109,8 +107,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
                     <TableHead>
                         <TableRow>
                             <TableCell/>
-                            <TableCell>ID</TableCell>
-                            <TableCell align="right">Condominio</TableCell>
+                            <TableCell>Condominio</TableCell>
+                            <TableCell align="right">ID</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

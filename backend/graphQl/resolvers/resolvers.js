@@ -164,7 +164,25 @@ const resolvers ={
                     }
                 })
             }
-        }
+        },
+
+        async deleteApartamento(root, args, {models}) {
+
+             models.apartamento.update({eliminado: args.eliminado}, {
+                where: {
+                    nombre: args.nombre,
+                    apartamento_id: args.apartamento_id
+                }
+            })
+
+            return models.apartamento.findOne({
+                where: {
+                    apartamento_id: args.apartamento_id,
+                    nombre: args.nombre
+                }
+            })
+
+        },
 
 
 
@@ -185,30 +203,7 @@ const resolvers ={
 
 
 
-        async deleteApartamento(root, args, {models}) {
 
-         const ap = models.apartamento.findOne({
-                where: {
-                    apartamento_id: args.apartamento_id,
-                    nombre: args.nombre
-                }
-
-            })
-
-            ap.eliminado = true
-
-           return await ap
-
-        },
-
-        async deleteApartamento(root, args,{models}){
-            return await models.usuario.update(where('apartamento_id' | integer, args.apartamento_id, args.apartamento_id), { set: args })({
-                where: {
-                    apartamento_id: args.apartamento_id,
-                        nombre: args.nombre
-                }
-            })
-        },
         async deleteUsuario(root, args,{models}){
             return await models.usuario.update({ eliminado: args.eliminado }, { set: args })
         },
