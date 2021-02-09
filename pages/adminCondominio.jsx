@@ -1,9 +1,9 @@
-import Navbar from '../components/navbar';
+import TablaCondominios from '../components/tablaCondominios';
 import Image from 'next/image'
 import styles from '../styles/adminCondominios.module.css'
 import React from "react";
 
-const AdminCondominio=()=>{
+const AdminCondominio=(props)=>{
 
     return(
         <>
@@ -14,7 +14,7 @@ const AdminCondominio=()=>{
                            height={120}
                     />
                 </figure>
-
+                <TablaCondominios/>
             </div>
 
 
