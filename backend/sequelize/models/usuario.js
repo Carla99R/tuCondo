@@ -25,9 +25,14 @@ module.exports =(sequelize, DataTypes)=>{
         is_admin:{
             type: DataTypes.BOOLEAN,
             allowNull: false
+        },
+        eliminado:{
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
 
 
-    },{});
+    },{timestamps: false});
+
     return Usuario
 }

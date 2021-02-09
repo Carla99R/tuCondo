@@ -27,6 +27,6 @@ const server = new ApolloServer({typeDefs, resolvers, context: {models}})
 const app = express();
 server.applyMiddleware({app});
 
-app.listen({port: 5000}, () => {
-    console.log("Corriendo servidor Apollo en http://localhost:5000" + server.graphqlPath)
+app.listen({port: 8000}, () => {
+    console.log("Corriendo servidor Apollo en http://localhost:8000" + server.graphqlPath)
 })

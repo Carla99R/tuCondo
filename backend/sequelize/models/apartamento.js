@@ -1,3 +1,5 @@
+const models = require('./index')
+
 module.exports =(sequelize, DataTypes)=>{
 
     const Apartamento = sequelize.define('apartamento',{
@@ -21,9 +23,26 @@ module.exports =(sequelize, DataTypes)=>{
         dimensiones:{
             type: DataTypes.STRING,
             allowNull: false
+        },
+        eliminado:{
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
+        usuario_id:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            foreignKey: true,
+            references: models.usuario
+        },
+        edificio_id:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            foreignKey: true,
+            references: models.edificio
         }
 
 
-    },{});
+    },{timestamps: false});
+
     return Apartamento
 }
