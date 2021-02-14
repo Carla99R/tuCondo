@@ -46,14 +46,10 @@ const typeDefs = gql`
         getEdificios: [Edificio]
         getCondominios: [Condominio]
         
-        getUsuario(usuario_id: Int!, cedula: String, correo: String): Usuario
-        getApartamento(apartamento_id: Int!, usuario_id: Int, nombre: String): Apartamento
-        getCondominio(condominio_id: Int!, usuario_id: Int, nombre: String): Condominio
-        getEdificio(edificio_id: Int!, condominio_id: Int, nombre: String): Edificio
-
-        
-        deleteApartamento(nombre: String, apartamento_id: Int!, eliminado: Boolean!): Apartamento
-
+        getUsuario(cedula: String, correo: String): Usuario
+        getApartamento(edificio_id: Int, nombre: String): Apartamento
+        getCondominio(usuario_id: Int, nombre: String): Condominio
+        getEdificio(condominio_id: Int, nombre: String): Edificio
 
     }
     
@@ -63,11 +59,20 @@ const typeDefs = gql`
         createEdificio(nombre: String!, num_pisos: String!,eliminado: Boolean!, condominio_id: Int!): Edificio!
         createApartamento(nombre: String!, alicuota: String!, is_alquilado: Boolean!, dimensiones: String!, eliminado: Boolean!, usuario_id: Int!, edificio_id: Int!): Apartamento!
 
-        deleteUsuario(correo: String, usuario_id: Int!, eliminado: Boolean!):Usuario!
-        deleteEdificio(nombre: String, edificio_id: Int!):Edificio!
-        deleteCondominio(nombre: String, condominio_id: Int!):Condominio!
 
-    
+        deleteUsuario(usuario_id: Int!): Usuario!
+        deleteCondominio(condominio_id: Int!): Usuario!
+        deleteEdificio(edificio_id: Int!):Edificio!
+        deleteApartamento(apartamento_id: Int!): Apartamento!
+        
+        
+        updateUsuario(usuario_id: Int!, nombre: String, apellido: String, correo: String): Usuario!
+        updateCondominio(condominio_id: Int!, nombre: String): Condominio!
+        updateEdificio(edificio_id: Int!, nombre: String, num_pisos: Int): Edificio!
+        updateApartamento(apartamento_id: Int!, nombre: String, alicuota: String, is_alquilado: Boolean, dimensiones: String): Apartamento!
+
+
+
     }
     
 `;

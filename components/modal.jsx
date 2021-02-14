@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import MaskInput from "./MaskInput";
 import {TextField} from "@material-ui/core";
 import Link from "next/link";
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -25,8 +27,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TransitionsModal() {
 
+ export default function TransitionsModal({usuario}) {
+
+    console.log("usuario", usuario)
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -144,3 +148,34 @@ export default function TransitionsModal() {
 
     );
 }
+
+export async function getStaticsProps(){
+
+    const client =  new ApolloClient({ // Cliente de Apolo
+        uri: `http://localhost:9100/graphql`,
+        cache: new InMemoryCache()
+    })
+
+    const { data } = await client.query({ // Query de graphql
+        query: gql`
+        query{
+            getUsuario(correo: correo){
+              usuario_id
+              nombre
+              apellido
+              cedula
+              correo
+            }
+          }
+        `
+    })
+    console.log('////////////////////////')
+    console.log('data:', data)
+
+    return { // Retornar la data que trae el query
+        props: {
+            usuario: data.usuario // Cambiar corchetes por la data cuando funcione
+        }
+    }
+}
+

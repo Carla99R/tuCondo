@@ -4,7 +4,8 @@ import styles from "../styles/landingPage.module.css";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 
-const HomePage =({ Component, pageProps })=> {
+const HomePage =()=> {
+
     return(
         <>
             <div className={styles.orden}>
@@ -13,14 +14,8 @@ const HomePage =({ Component, pageProps })=> {
                        alt ="imagen"
                        layout= "fill"
                 />
-                <Navbar>
-                    <Component {...pageProps} />
-                </Navbar>
-
+                <Navbar/>
             </div>
-
-
-            {/*<p>Comodidad para tu hogar</p>*/}
 
         </>
     )
