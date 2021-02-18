@@ -1,0 +1,18 @@
+.orden{
+    display: flex;
+    flex-direction: column;
+}
+
+.imagen{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.titulo{
+    justify-content: center;
+    color: rgb(1, 70, 70);
+}
+
+.texto{
+    color:rgb(1, 70, 70);
+}
