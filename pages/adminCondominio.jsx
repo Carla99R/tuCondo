@@ -2,14 +2,15 @@ import TablaCondominios from '../components/tablaCondominios';
 import Image from 'next/image'
 import styles from '../styles/adminCondominios.module.css'
 import React, {useContext} from "react";
-import clientContext from "../context/client/clientContext";
+import ClientState from "../context/client/clientState";
+
 
 const AdminCondominio=()=>{
 
-    const { nombre } = useContext(clientContext);
-    console.log(nombre);
+
+
     return(
-        <>
+        <ClientState>
             <div className={styles.orden}>
                 <figure className={styles.logo}>
                     <Image src="/DonBarriga.png" alt="logo" className={styles.imagen}
@@ -23,7 +24,7 @@ const AdminCondominio=()=>{
 
             {/*<p>Comodidad para tu hogar</p>*/}
 
-        </>
+        </ClientState>
     )
 
 }

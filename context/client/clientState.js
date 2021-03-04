@@ -1,7 +1,7 @@
 import React, {useReducer, useState, useEffect, useContext} from "react";
 import ClientContext from "./clientContext";
 import { SET_USER } from "../types";
-import clientReducer from "./clientReducer";
+import ClientReducer from "./clientReducer";
 
 const ClientState = props=>{
 
@@ -12,10 +12,10 @@ const ClientState = props=>{
         password: "",
         nombre: "",
         apellido: "",
-        isAdmin : ""
+        is_admin : ""
     }
 
-    const [state, dispatch] = useReducer(clientReducer, initialState);
+    const [state, dispatch] = useReducer(ClientReducer, initialState);
 
     const setUser = (data) => {
         dispatch({
@@ -31,7 +31,7 @@ const ClientState = props=>{
                 password: state.password,
                 nombre: state.nombre,
                 apellido: state.apellido,
-                isAdmin: state.isAdmin,
+                is_admin: state.is_admin,
                 setUser
             }}
         >

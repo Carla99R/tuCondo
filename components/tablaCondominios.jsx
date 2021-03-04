@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import ClientContext from "../context/client/clientContext";
 
 
     const useRowStyles = makeStyles({
@@ -100,6 +101,13 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
     ];
 
     export default function CollapsibleTable() {
+
+        const clientContext = useContext(ClientContext);
+        const { nombre, apellido } = clientContext;
+
+        console.log("Hola");
+        console.log(nombre, apellido);
+
         return (
             <TableContainer component={Paper}>
                 <Table aria-label="collapsible table">

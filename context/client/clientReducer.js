@@ -7,7 +7,9 @@ export default (state, action) => {
         case SET_USER:
             return {
                 ...state,
-                nombre: payload.getUsuarioLogin.nombre
+                nombre: payload.nombre,
+                apellido: payload.apellido,
+                is_admin: payload.is_admin
             }
         default:
             return state;

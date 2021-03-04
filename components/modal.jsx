@@ -12,7 +12,7 @@ import Link from "next/link";
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import AdminCondominio from "../pages/adminCondominio";
 import { useRouter } from "next/router";
-import clientContext from "../context/client/clientContext";
+import ClientContext from "../context/client/clientContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ export default function TransitionsModal()  {
 
     const classes = useStyles();
     const router = useRouter();
-    const { setUser } = useContext(clientContext);
+    const { setUser } = useContext(ClientContext);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
@@ -62,11 +62,23 @@ export default function TransitionsModal()  {
             password: interdata.password
 
         }
-        const info = await getStaticsPropss(datos.correo, datos.password);
+        const info = await validUsuario(datos.correo, datos.password);
 
         console.log(info.getUsuarioLogin.nombre)
-        setUser(info);
-        router.push('/adminCondominio');
+        console.log(info)
+        setUser(info.getUsuarioLogin);
+
+        console.log(setUser)
+
+
+        if(info.getUsuarioLogin.is_admin === true){
+            router.push('/adminCondominio');
+        }
+        else{
+            //TODO ACÁ IRÍA LA PRIMERA PAGE DE UN USUARIO NORMAL
+            //router.push('/inicio');
+        }
+
 
         console.log(datos.correo);
         console.log(datos.password);
@@ -82,7 +94,7 @@ export default function TransitionsModal()  {
 
     }
 
-     async function getStaticsPropss(correo, psw) { //Función asincrona para consumir datos de la API
+     async function validUsuario(correo, psw) { //Función asincrona para consumir datos de la API
 
          const client = new ApolloClient({ // Cliente de Apolo
              uri: `http://localhost:9300/graphql`,
@@ -109,7 +121,8 @@ export default function TransitionsModal()  {
                  console.log('////////////////////////')
                  console.log('data:', data)
 
-                 //res.statusCode(200).json({usuario: data.getUsuarioLogin, error: null });
+
+         //res.statusCode(200).json({usuario: data.getUsuarioLogin, error: null });
                  //console.log(res);
 
                  return data;
