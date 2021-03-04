@@ -1,10 +1,13 @@
 import TablaCondominios from '../components/tablaCondominios';
 import Image from 'next/image'
 import styles from '../styles/adminCondominios.module.css'
-import React from "react";
+import React, {useContext} from "react";
+import clientContext from "../context/client/clientContext";
 
 const AdminCondominio=()=>{
 
+    const { nombre } = useContext(clientContext);
+    console.log(nombre);
     return(
         <>
             <div className={styles.orden}>

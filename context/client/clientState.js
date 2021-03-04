@@ -1,5 +1,7 @@
 import React, {useReducer, useState, useEffect, useContext} from "react";
-import clientContext from "./clientContext";
+import ClientContext from "./clientContext";
+import { SET_USER } from "../types";
+import clientReducer from "./clientReducer";
 
 const ClientState = props=>{
 
@@ -13,6 +15,29 @@ const ClientState = props=>{
         isAdmin : ""
     }
 
-    const [state, dispatch] = useReducer(clientReducer, initialState)
+    const [state, dispatch] = useReducer(clientReducer, initialState);
 
+    const setUser = (data) => {
+        dispatch({
+            type:SET_USER,
+            payload: data
+        })
+    }
+
+    return (
+        <ClientContext.Provider
+            value={{
+                correo: state.correo,
+                password: state.password,
+                nombre: state.nombre,
+                apellido: state.apellido,
+                isAdmin: state.isAdmin,
+                setUser
+            }}
+        >
+            {props.children}
+        </ClientContext.Provider>
+    )
 }
+
+export default ClientState;

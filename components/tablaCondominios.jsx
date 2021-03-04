@@ -45,7 +45,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
         return (
             <React.Fragment>
-                <TableRow className={classes.root}>
+                <TableRow>
                     <TableCell>
                         <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                             {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
@@ -90,7 +90,6 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
     Row.propTypes = {
         row: PropTypes.shape({
             calories: PropTypes.number.isRequired,
-            carbs: PropTypes.number.isRequired,
         })
     };
 
