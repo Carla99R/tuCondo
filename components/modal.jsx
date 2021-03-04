@@ -63,6 +63,8 @@ export default function TransitionsModal()  {
 
         }
         const info = await getStaticsPropss(datos.correo, datos.password);
+
+        console.log(info.getUsuarioLogin.nombre)
         setUser(info);
         router.push('/adminCondominio');
 
@@ -85,33 +87,46 @@ export default function TransitionsModal()  {
          const client = new ApolloClient({ // Cliente de Apolo
              uri: `http://localhost:9300/graphql`,
              cache: new InMemoryCache()
-         })
-         correo = correo;
-         psw = psw;
+         });
 
-         const {data} = await client.query({ // Query de graphql
-             query: gql`
-        query{
-            getUsuarioLogin(correo: correo, psw: psw){
-              usuario_id
-              nombre
-              apellido
-              cedula
-              correo
-              is_admin
-            }
-          }
-        `},{
-             variables: {
-                 "correo": correo,
-                 "psw":psw
-             }
-         })
-         console.log('////////////////////////')
-         console.log('data:', data)
+        // async function getStaticsPropss(correo, psw, res) {
 
-         return data.getUsuarioLogin;
-     }
+             // try{
+                 const {data} = await client.query({ // Query de graphql
+                     query: gql`
+                        query{
+                            getUsuarioLogin(correo: "${correo}", psw: "${psw}"){
+                              usuario_id
+                              nombre
+                              apellido
+                              cedula
+                              correo
+                              is_admin
+                            }
+                          }
+                        `,
+                 });
+                 console.log('////////////////////////')
+                 console.log('data:', data)
+
+                 //res.statusCode(200).json({usuario: data.getUsuarioLogin, error: null });
+                 //console.log(res);
+
+                 return data;
+                 //return data.getUsuarioLogin;
+             // }
+             // catch (error){
+             //     if(error.message === "404 Not Found"){
+             //         res.statusCode(400).json({usuario: null, error: "Usuario no encontrado"})
+             //     }
+             //     // else{
+             //     //     res.statusCode(500).json({usuario: null, error:"Error interno, por favor vuelva a intentarlo"})
+             //     // }
+             // }
+
+             };
+
+
 
     return (
         <div>
