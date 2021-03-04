@@ -4,22 +4,27 @@ import styles from "../styles/landingPage.module.css";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 
-const HomePage =()=> {
+const HomePage =({ Component, pageProps })=> {
 
-    return(
+    return (
         <>
             <div className={styles.orden}>
                 <Image className={styles.fondo}
-                       src = "/fondo.jpg"
-                       alt ="imagen"
-                       layout= "fill"
+                       src="/fondo.jpg"
+                       alt="imagen"
+                       layout="fill"
                 />
-                <Navbar/>
+                <Navbar>
+                    <Component {...pageProps} />
+                </Navbar>
+
             </div>
 
         </>
     )
+
 }
+
 
 export default HomePage;
 

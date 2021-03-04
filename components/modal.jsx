@@ -9,7 +9,8 @@ import { useForm } from "react-hook-form";
 import MaskInput from "./MaskInput";
 import {TextField} from "@material-ui/core";
 import Link from "next/link";
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
- export default function TransitionsModal({usuario}) {
-
-    console.log("usuario", usuario)
+ const TransitionsModal =({pageProps }) => {
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -44,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
         setOpen(false);
     };
 
-    const {register, handleSubmit} = useForm({
+    const {register, handleSubmit, error} = useForm({
         reValidateMode:'onSubmit'
     });
 
 
-    const [data, setData] = useState({
+    const [dato, setData] = useState({
         correo:"",
         password:""
     })
@@ -66,17 +65,19 @@ const useStyles = makeStyles((theme) => ({
 
         processData = true;
 
+        console.log(processData);
+
         console.log(datos.correo);
         console.log(datos.password);
     }
 
     const handleChange = e =>{
         setData({
-            ...data,
+            ...dato,
             [e.target.name] : e.target.value
         })
-        console.log(data.password)
-        console.log(data.correo)
+        console.log(dato.correo);
+        console.log(dato.password);
 
     }
 
@@ -84,98 +85,114 @@ const useStyles = makeStyles((theme) => ({
     return (
 
         <>
-            {processData === true ? <adminCondominio/> :
+                {processData === true ? <adminCondominio/> :
 
-                <div>
-                    <AccountCircle className={styles.login} fontSize={"large"} onClick={handleOpen}/>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-                        <Fade in={open}>
-                            <div className={classes.paper}>
-                                <h2 id="transition-modal-title">Inicio de sesión</h2>
+                    <div>
+                        <AccountCircle className={styles.login} fontSize={"large"} onClick={handleOpen}/>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={open}
+                            onClose={handleClose}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                                timeout: 500,
+                            }}
+                        >
+                            <Fade in={open}>
+                                <div className={classes.paper}>
+                                    <h2 id="transition-modal-title">Inicio de sesión</h2>
 
+                                    <form onSubmit={handleSubmit(onSubmit)} id="transition-modal-description"
+                                          className={`${classes.root} ${styles.form}`}>
+                                        <div>
+                                            <TextField label="Correo:" className={"col s12"}
+                                                       name={"correo"}
+                                                       ref={register({
+                                                           required: {value: true, message: "Correo obligatorio"}
+                                                       })}
+                                                       onChange={handleChange}
+                                            />
+                                        </div>
 
-                                <form onSubmit={handleSubmit(onSubmit)} id="transition-modal-description"
-                                      className={`${classes.root} ${styles.form}`}>
-                                    <div>
-                                        <TextField label="Correo:" className={"col s12"}
-                                                   name={"correo"}
-                                                    ref={register({
-                                                        required: {value: true, message: "Correo obligatorio"}
-                                                    })}
-                                                   onChange={handleChange}
-                                        />
-                                    </div>
+                                        <div>
+                                            <TextField label="Contraseña:" className={"col s12"} id="standard-password-input" type="password"
+                                                       name={"password"}
+                                                       ref={register({
+                                                           required: {value: true, message: "Contraseña obligatoria"}
+                                                       })}
+                                                       onChange={handleChange}
+                                            />
 
-                                    <div>
-                                        <TextField label="Contraseña:" className={"col s12"} id="standard-password-input" type="password"
-                                                   name={"password"}
-                                                   ref={register({
-                                                       required: {value: true, message: "Contraseña obligatoria"}
-                                                   })}
-                                                   onChange={handleChange}
-                                        />
+                                        </div>
 
-                                    </div>
+                                        <div className={styles.inicio}>
+                                            {getStaticsProps}
 
-                                    <div className={styles.inicio}>
-                                        <Link href="/adminCondominio">
-                                            <button className={styles.boton}>
-                                                Iniciar sesión
-                                            </button>
-                                        </Link>
-                                    </div>
+                                            <Link href="/adminCondominio">
+                                                <button className={styles.boton}>
+                                                    Iniciar sesión
+                                                </button>
+                                            </Link>
+                                        </div>
 
-                                </form>
+                                    </form>
 
-                            </div>
-                        </Fade>
-                    </Modal>
-                </div>
+                                </div>
+                            </Fade>
+                        </Modal>
+                    </div>
 
-            }
+                }
+
         </>
 
     );
-}
 
-export async function getStaticsProps(){
+     async function getStaticsProps() { //Función asincrona para consumir datos de la API
 
-    const client =  new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9100/graphql`,
-        cache: new InMemoryCache()
-    })
+         const client = new ApolloClient({ // Cliente de Apolo
+             uri: `http://localhost:9200/graphql`,
+             cache: new InMemoryCache()
+         })
 
-    const { data } = await client.query({ // Query de graphql
-        query: gql`
+         const args = {
+             correo: dato.correo,
+             psw: dato.password
+         }
+
+         const {data} = await client.query({ // Query de graphql
+             query: gql`
         query{
-            getUsuario(correo: correo){
+            getUsuarioLogin(correo: args.correo, psw: args.psw){
               usuario_id
               nombre
               apellido
               cedula
               correo
+              is_admin
             }
           }
         `
-    })
-    console.log('////////////////////////')
-    console.log('data:', data)
+         })
+         console.log('////////////////////////')
+         console.log('data:', data)
 
-    return { // Retornar la data que trae el query
-        props: {
-            usuario: data.usuario // Cambiar corchetes por la data cuando funcione
-        }
-    }
+         return { // Retornar la data que trae el query
+             pageProps: {
+                 usuario: data.getUsuario() // Cambiar corchetes por la data cuando funcione
+             }
+         }
+     }
+
 }
+
+
+
+
+export default TransitionsModal
+
+
 

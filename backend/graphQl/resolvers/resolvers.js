@@ -5,6 +5,34 @@ const resolvers ={
             return models.usuario.findAll()
         },
 
+        async getUsuarioLogin(root, args, {models}) {
+            if (!args.cedula && args.correo) {
+                return models.usuario.findOne({
+                    where: {
+                        correo: args.correo,
+                        eliminado: false,
+                        psw: args.psw
+                    }
+                })
+            } else if (args.cedula && !args.correo) {
+                return models.usuario.findOne({
+                    where: {
+                        cedula: args.cedula,
+                        eliminado: false,
+                        psw: args.psw
+                    }
+                })
+            }else if(args.cedula && args.correo){
+                return models.usuario.findOne({
+                    where: {
+                        cedula: args.cedula,
+                        correo: args.correo,
+                        eliminado: false,
+                        psw: args.psw
+                    }
+                })
+            }
+        },
         async getUsuario(root, args, {models}) {
             if (!args.cedula && args.correo) {
                 return models.usuario.findOne({

@@ -29,10 +29,14 @@ module.exports =(sequelize, DataTypes)=>{
         eliminado:{
             type: DataTypes.BOOLEAN,
             allowNull: false
+        },
+        psw:{
+            type: DataTypes.STRING,
+            allowNull: false
         }
 
-
     },{timestamps: false});
+
 
     return Usuario
 }

@@ -2,9 +2,8 @@ import TablaCondominios from '../components/tablaCondominios';
 import Image from 'next/image'
 import styles from '../styles/adminCondominios.module.css'
 import React from "react";
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
-const AdminCondominio=(props)=>{
+const AdminCondominio=()=>{
 
     return(
         <>

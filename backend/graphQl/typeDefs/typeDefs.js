@@ -9,7 +9,8 @@ const typeDefs = gql`
         cedula: String!,
         correo: String!,
         is_admin: Boolean!,
-        eliminado: Boolean!
+        eliminado: Boolean!,
+        psw: String!
     }
     
     type Condominio{
@@ -47,6 +48,7 @@ const typeDefs = gql`
         getCondominios: [Condominio]
         
         getUsuario(cedula: String, correo: String): Usuario
+        getUsuarioLogin(cedula: String, correo: String): Usuario
         getApartamento(edificio_id: Int, nombre: String): Apartamento
         getCondominio(usuario_id: Int, nombre: String): Condominio
         getEdificio(condominio_id: Int, nombre: String): Edificio
