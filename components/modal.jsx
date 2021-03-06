@@ -6,13 +6,11 @@ import Fade from '@material-ui/core/Fade';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styles from "../styles/landingPage.module.css";
 import { useForm } from "react-hook-form";
-import MaskInput from "./MaskInput";
 import {TextField} from "@material-ui/core";
-import Link from "next/link";
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
-import AdminCondominio from "../pages/adminCondominio";
 import { useRouter } from "next/router";
 import ClientContext from "../context/client/clientContext";
+import Link from "next/link";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,19 +63,22 @@ export default function TransitionsModal()  {
         const info = await validUsuario(datos.correo, datos.password);
 
         console.log(info.getUsuarioLogin.nombre)
-        console.log(info)
+        console.log(info.getUsuarioLogin)
         setUser(info.getUsuarioLogin);
+
+        localStorage.setItem('nombre', info.getUsuarioLogin.nombre);
+        localStorage.setItem('usuario_id', info.getUsuarioLogin.usuario_id);
+
 
         console.log(setUser)
 
 
-        if(info.getUsuarioLogin.is_admin === true){
-            router.push('/adminCondominio');
-        }
-        else{
-            //TODO ACÁ IRÍA LA PRIMERA PAGE DE UN USUARIO NORMAL
-            //router.push('/inicio');
-        }
+       if(info.getUsuarioLogin.is_admin === true){
+           router.push("/adminCondominio",`/adminCondominio/${info.getUsuarioLogin.nombre}`);
+       }
+       else{
+           router.push("/inicio",`/inicio/${info.getUsuarioLogin.nombre}`);
+       }
 
 
         console.log(datos.correo);
@@ -97,7 +98,7 @@ export default function TransitionsModal()  {
      async function validUsuario(correo, psw) { //Función asincrona para consumir datos de la API
 
          const client = new ApolloClient({ // Cliente de Apolo
-             uri: `http://localhost:9300/graphql`,
+             uri: `http://localhost:9500/graphql`,
              cache: new InMemoryCache()
          });
 
@@ -121,21 +122,7 @@ export default function TransitionsModal()  {
                  console.log('////////////////////////')
                  console.log('data:', data)
 
-
-         //res.statusCode(200).json({usuario: data.getUsuarioLogin, error: null });
-                 //console.log(res);
-
                  return data;
-                 //return data.getUsuarioLogin;
-             // }
-             // catch (error){
-             //     if(error.message === "404 Not Found"){
-             //         res.statusCode(400).json({usuario: null, error: "Usuario no encontrado"})
-             //     }
-             //     // else{
-             //     //     res.statusCode(500).json({usuario: null, error:"Error interno, por favor vuelva a intentarlo"})
-             //     // }
-             // }
 
              };
 

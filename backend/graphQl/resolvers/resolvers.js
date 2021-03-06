@@ -60,7 +60,12 @@ const resolvers ={
         },
 
         async getCondominios(root, args, {models}) {
-            return models.condominio.findAll()
+            return models.condominio.findAll({
+                where:{
+                    usuario_id: args.usuario_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getCondominio(root, args, {models}) {

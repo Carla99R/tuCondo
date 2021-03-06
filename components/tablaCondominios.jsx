@@ -1,9 +1,4 @@
-import React, {useContext} from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
+import React, {useEffect, useState} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,119 +6,134 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import ClientContext from "../context/client/clientContext";
+import {Spinner} from "react-bootstrap";
+import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 
 
-    const useRowStyles = makeStyles({
-        root: {
-            '& > *': {
-                borderBottom: 'unset',
-            },
-        },
-    });
+     function CollapsibleTable() {
 
-    function createData(name, calories, fat, carbs, protein, price) {
-        return {
-            name,
-            calories,
-            fat,
-            carbs,
-            protein,
-            price,
-            history: [
-                {date: "Tus rosas", customerId: '2B', amount: 3},
-                {date: "Tus petalos", customerId: '7A', amount: 1},
-            ],
-        };
-    }
+         const [ usuario_id, setUsuario_id ] = useState('');
+         const [ loading, setLoading ] = useState('');
 
-    function Row(props) {
-        const {row} = props;
-        const [open, setOpen] = React.useState(false);
-        const classes = useRowStyles();
 
-        return (
-            <React.Fragment>
-                <TableRow>
-                    <TableCell>
-                        <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                            {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                        {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box margin={1}>
-                                <Table size="small" aria-label="purchases">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Edificio</TableCell>
-                                            <TableCell>Apartamento</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {row.history.map((historyRow) => (
-                                            <TableRow key={historyRow.date}>
-                                                <TableCell component="th" scope="row">
-                                                    {historyRow.date}
-                                                </TableCell>
-                                                <TableCell>{historyRow.customerId}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
-            </React.Fragment>
+         useEffect(()=>{
+             setLoading(true);
+             setUsuario_id(localStorage.getItem('usuario_id'));
+
+         },[]);
+
+         const usuario = async(interdata) => {
+
+             const info = await infoAdmin(usuario_id);
+             return info.getCondominios;
+         }
+
+             return (
+            <>
+                {loading ?
+                    <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                    </Spinner>: null}
+
+                <div>
+                    <Table responsive="sm">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{usuario.nombre}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>ID</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                        </tr>
+
+                        </tbody>
+                    </Table>
+                    <Table responsive="md">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                            <th>Table heading</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                            <td>Table cell</td>
+                        </tr>
+                        </tbody>
+                    </Table>
+                </div>
+            </>
         );
-    }
+     }
+    export default CollapsibleTable
 
-    Row.propTypes = {
-        row: PropTypes.shape({
-            calories: PropTypes.number.isRequired,
-        })
-    };
+    async function infoAdmin(usuario_id) { //Función asincrona para consumir datos de la API
 
-    const rows = [
-        createData('TuCondo', 159),
-        createData('MiCondo', 237),
-        createData('NuestroCondo', 262)
-    ];
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9500/graphql`,
+            cache: new InMemoryCache()
+        });
 
-    export default function CollapsibleTable() {
+        const {data} = await client.query({ // Query de graphql
+            query: gql`
+                            query{
+                                getCondominios("${usuario_id}"){
+                                  usuario_id
+                                  condominio_id
+                                  nombre
+                                  eliminado
+                                }
+                              }
+                            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
 
-        const clientContext = useContext(ClientContext);
-        const { nombre, apellido } = clientContext;
+        setLoading(false);
 
-        console.log("Hola");
-        console.log(nombre, apellido);
+        return data;
 
-        return (
-            <TableContainer component={Paper}>
-                <Table aria-label="collapsible table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell/>
-                            <TableCell>Condominio</TableCell>
-                            <TableCell align="right">ID</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <Row key={row.name} row={row}/>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        );
-    }
+};
+

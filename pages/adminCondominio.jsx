@@ -1,13 +1,18 @@
-import TablaCondominios from '../components/tablaCondominios';
+import CollapsibleTable from '../components/tablaCondominios';
 import Image from 'next/image'
 import styles from '../styles/adminCondominios.module.css'
-import React, {useContext} from "react";
+import React, {useEffect, useState} from "react";
 import ClientState from "../context/client/clientState";
 
 
 const AdminCondominio=()=>{
 
+    const [ name, setName ] = useState('');
 
+    useEffect(()=>{
+        setName(localStorage.getItem('nombre'));
+
+    },[]);
 
     return(
         <ClientState>
@@ -18,12 +23,9 @@ const AdminCondominio=()=>{
                            height={120}
                     />
                 </figure>
-                <TablaCondominios/>
+                <div>{name}</div>
+                <CollapsibleTable/>
             </div>
-
-
-            {/*<p>Comodidad para tu hogar</p>*/}
-
         </ClientState>
     )
 

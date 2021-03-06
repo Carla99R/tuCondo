@@ -1,7 +1,10 @@
 import React, {useReducer, useState, useEffect, useContext} from "react";
 import ClientContext from "./clientContext";
-import { SET_USER } from "../types";
 import ClientReducer from "./clientReducer";
+import {
+    SET_USER
+}from '../types'
+
 
 const ClientState = props=>{
 
