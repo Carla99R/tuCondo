@@ -6,7 +6,7 @@ const Informacion=()=>{
     return(
         <>
             <Navbar/>
-            <h1>Informacion</h1>
+            <h1 >Informacion</h1>
             {
                 <p>
                 ¡Bienvenid@! =D 
