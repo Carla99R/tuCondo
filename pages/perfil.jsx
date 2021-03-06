@@ -25,7 +25,7 @@ const Perfil =()=> {
     const [ correo, setCorreo ] = useState(localStorage.getItem('correo'));
     const [ usuario_id, setUsuario_id ] = useState(localStorage.getItem('usuario_id'));
 
-    const [ loading, setLoading ] = useState('');
+    const [ loading, setLoading ] = useState(true);
 
 
     useEffect(()=>{
@@ -59,6 +59,7 @@ const Perfil =()=> {
 
         const info = await updateUsuario(dato.nombre, dato.apellido, dato.correo);
 
+
         console.log(info.updateUsuario.nombre)
         console.log(info.updateUsuario)
 
@@ -75,13 +76,19 @@ const Perfil =()=> {
 
         const info = await getInitialProps(dato.usuario_id);
 
-        console.log(info.getInitialProps.nombre)
-        console.log(info.getInitialProps)
+        console.log(info.getApartamento.nombre)
+        console.log(info.getApartamento)
 
-        localStorage.setItem('nombreA', info.getInitialProps.nombre);
-        localStorage.setItem('alicuota', info.getInitialProps.alicuota);
-        localStorage.setItem('dimensiones', info.getInitialProps.dimensiones);
-        localStorage.setItem('is_alquilado', info.getInitialProps.is_alquilado);
+        localStorage.setItem('nombreA', info.getApartamento.nombre);
+        localStorage.setItem('alicuota', info.getApartamento.alicuota);
+        localStorage.setItem('dimensiones', info.getApartamento.dimensiones);
+
+        if(info.getApartamento.is_alquilado === true){
+            localStorage.setItem('is_alquilado', "Sí");
+        }else{
+            localStorage.setItem('is_alquilado', "No");
+        }
+
 
         setLoading(false);
 
@@ -155,11 +162,10 @@ const Perfil =()=> {
 
 
     return (
-        <div>
+        <div className={styles.toda}>
 
             {loading ?
                 <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
                 </Spinner>: null}
 
 
@@ -173,11 +179,33 @@ const Perfil =()=> {
             </div>
 
             <div className={styles.todo}>
+
                 <div className={styles.datos}>
-                    <label className={styles.label} >
-                        {/*{inicial()}*/}
-                        Apartamento {localStorage.getItem("nombreA")}
+                    <label className={styles.labelI}
+                    content={inicial()}
+                    >
+                        <label className={styles.labelN}>
+                            Apartamento {localStorage.getItem("nombreA")}
+                        </label>
+
+                        <label className={styles.label}>
+                           <p>-----------------------------------------------------</p>
+                            <p className={styles.a}>Alicuota: {localStorage.getItem("alicuota")}</p>
+                        </label>
+
+                        <label className={styles.label}>
+                            <p>-----------------------------------------------------</p>
+                            <p className={styles.a}>Dimensiones: {localStorage.getItem("dimensiones")}</p>
+                        </label>
+
+                        <label className={styles.label}>
+                            <p>-----------------------------------------------------</p>
+                            <p className={styles.a}>Alquilado: {localStorage.getItem("is_alquilado")}</p>
+                        </label>
+
+
                     </label>
+
                 </div>
 
                 <div className={styles.paper}>

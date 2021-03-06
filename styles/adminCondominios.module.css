@@ -30,19 +30,41 @@
     padding-top: 3%;
 }
 
-.label{
+.labelI{
     position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 10%;
+    margin-top: 5%;
+}
+
+.labelN{
+
+    font-size: large;
+    font-weight: bold;
+}
+
+.a{
+    display: flex;
+    justify-content: center;
 }
 
 .todo{
     display: flex;
     justify-content: space-between;
-    background-color: #00c2cb;
+    width: 100%;
 }
 
 .datos{
     position: absolute;
     display: flex;
-    background-color: goldenrod;
     width: 100%;
+}
+
+.toda{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
