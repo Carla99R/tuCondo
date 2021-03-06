@@ -9,7 +9,10 @@ export default (state, action) => {
                 ...state,
                 nombre: payload.nombre,
                 apellido: payload.apellido,
-                is_admin: payload.is_admin
+                is_admin: payload.is_admin,
+                correo: payload.correo,
+                cedula: payload.cedula
+
             }
         default:
             return state;

@@ -4,7 +4,6 @@ import styles from "../styles/landingPage.module.css";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 import ClientState from "../context/client/clientState";
-import Modal from "@material-ui/core/Modal";
 
 const HomePage =()=> {
 

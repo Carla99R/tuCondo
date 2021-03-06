@@ -15,7 +15,8 @@ const ClientState = props=>{
         password: "",
         nombre: "",
         apellido: "",
-        is_admin : ""
+        is_admin : "",
+        cedula : ""
     }
 
     const [state, dispatch] = useReducer(ClientReducer, initialState);
@@ -35,6 +36,7 @@ const ClientState = props=>{
                 nombre: state.nombre,
                 apellido: state.apellido,
                 is_admin: state.is_admin,
+                cedula: state.cedula,
                 setUser
             }}
         >

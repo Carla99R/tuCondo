@@ -155,6 +155,13 @@ const resolvers ={
                     }
                 })
 
+            }else if(args.usuario_id){
+                return models.apartamento.findOne({
+                    where: {
+                        usuario_id: args.usuario_id,
+                        eliminado: false
+                    }
+                })
             }
         }
 

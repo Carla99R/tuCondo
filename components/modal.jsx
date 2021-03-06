@@ -10,7 +10,6 @@ import {TextField} from "@material-ui/core";
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import { useRouter } from "next/router";
 import ClientContext from "../context/client/clientContext";
-import Link from "next/link";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,6 +67,10 @@ export default function TransitionsModal()  {
 
         localStorage.setItem('nombre', info.getUsuarioLogin.nombre);
         localStorage.setItem('usuario_id', info.getUsuarioLogin.usuario_id);
+        localStorage.setItem('apellido', info.getUsuarioLogin.apellido);
+        localStorage.setItem('correo', info.getUsuarioLogin.correo);
+        localStorage.setItem('cedula', info.getUsuarioLogin.cedula);
+
 
 
         console.log(setUser)

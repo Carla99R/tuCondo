@@ -11,8 +11,8 @@ const NavBarInicio =() =>{
             <Navbar.Brand href="Inicio" className={styles.brand}>
                 <figure className={styles.logo}>
                     <Image src="/logotipo.png" alt="logo" className={styles.imagen}
-                           width={120}
-                           height={120}
+                           width={110}
+                           height={110}
                     />
                 </figure>
             </Navbar.Brand>
