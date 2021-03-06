@@ -73,3 +73,16 @@
     position: absolute;
     max-width: 345px;
 }
+
+.scroll {
+    max-height: 150px;
+    overflow-y: auto;
+
+}
+
+.tod{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 2%;
+}
