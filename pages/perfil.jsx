@@ -164,11 +164,6 @@ const Perfil =()=> {
     return (
         <div className={styles.toda}>
 
-            {loading ?
-                <Spinner animation="border" role="status">
-                </Spinner>: null}
-
-
             <div className={styles.orden}>
                 <Image className={styles.fondo}
                        src="/fondoInicio.jpg"
