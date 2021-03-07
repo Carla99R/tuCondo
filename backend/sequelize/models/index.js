@@ -13,8 +13,11 @@ const models ={
     edificio: sequelize.import('./edificio'),
     condominio: sequelize.import('./condominio'),
     apartamento: sequelize.import('./apartamento'),
-    noticia: sequelize.import('./noticia')
 
+    pago: sequelize.import('./pago'),
+    tipoPago: sequelize.import('./tipoPago'),
+    factura: sequelize.import('./factura'),
+    estatus: sequelize.import('./estatus')
 
 }
 

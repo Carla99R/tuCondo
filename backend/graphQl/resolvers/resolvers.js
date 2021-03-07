@@ -171,13 +171,47 @@ const resolvers ={
                 })
             }
         },
-        async getNoticias(root, args, {models}) {
-            return models.noticia.findAll({
+        async getPagos(root, args, {models}) {
+            return models.pago.findAll({
                 where:{
-                    eliminado: false
+                    factura_id: args.factura_id
                 }
             })
         },
+        async getFacturas(root, args, {models}) {
+            return models.factura.findAll({
+                where:{
+                    usuario_id: args.usuario_id
+                }
+            })
+        },
+
+        async getFactura(root, args, {models}) {
+            if (args.estatus_id) {
+                return models.factura.findOne({
+                    where: {
+                        estatus_id: args.estatus_id,
+                        usuario_id: args.estatus_id
+                    }
+                })
+            }
+        },
+        async getEstatus(root, args, {models}) {
+            return models.estatus.findOne({
+                where:{
+                    estatus_id: args.estatus_id
+                }
+            })
+        },
+
+        async getTipoPago(root, args, {models}) {
+            return models.estatus.findOne({
+                where:{
+                    tipoPago_id: args.tipoPago_id
+                }
+            })
+        },
+
 
     },
 
@@ -195,10 +229,13 @@ const resolvers ={
             return await models.apartamento.create({nombre, eliminado, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id})
         },
 
-        async createNoticia(root, {titulo, mensaje, usuario_id, eliminado},{models}){
-            return await models.noticia.create({titulo, mensaje, usuario_id, eliminado})
+        async createPago(root, {tipoPago_id, factura_id, currency, conversion, monto},{models}){
+            return await models.pago.create({tipoPago_id, factura_id, currency, conversion, monto})
         },
 
+        async createFactura(root, {usuario_id, monto_total},{models}){
+            return await models.factura.create({usuario_id, monto_total})
+        },
 
         async deleteUsuario(root, args, {models}){
 
@@ -238,16 +275,6 @@ const resolvers ={
             console.log(eliminado)
             await models.usuario.update(eliminado, {where: {apartamento_id:args.apartamento_id}})
             return models.usuario.findByPk(args.apartamento_id)
-        },
-
-        async deleteNoticia(root, args, {models}){
-
-            const eliminado = {
-                eliminado: true
-            };
-            console.log(eliminado)
-            await models.usuario.update(eliminado, {where: {noticia_id:args.noticia_id}})
-            return models.usuario.findByPk(args.noticia_id)
         },
 
         async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id
@@ -296,6 +323,15 @@ const resolvers ={
             return models.usuario.findByPk(args.apartamento_id)
         },
 
+        async updateFactura(root, args, {models}){
+
+            const actualizacion = {
+                estatus:args.estatus
+            };
+            console.log(actualizacion)
+            await models.usuario.update(actualizacion, {where: {factura_id:args.factura_id}})
+            return models.usuario.findByPk(args.factura_id)
+        },
     }
 
 }

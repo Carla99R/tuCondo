@@ -23,9 +23,9 @@ const NavBarInicio =() =>{
                 <Link href="/perfil" scroll={true}>
                     <a id={styles.nosotros}>Perfil</a>
                 </Link>
-                <Link href="/noticias" scroll={true}>
-                    <a id={styles.info}>Noticias</a>
-                </Link>
+                {/*<Link href="/noticias" scroll={true}>*/}
+                {/*    <a id={styles.info}>Noticias</a>*/}
+                {/*</Link>*/}
                 <Link href="/pagos" scroll={true}>
                     <a id={styles.info}>Pagos</a>
                 </Link>
