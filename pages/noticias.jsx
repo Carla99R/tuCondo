@@ -18,6 +18,7 @@ import NavbarInicio from "../components/navbarInicio";
 import Image from "next/image";
 import {red} from "@material-ui/core/colors";
 import classnames from "classnames";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 class MoreVertIcon extends React.Component {
     render() {
@@ -56,11 +57,12 @@ const Noticias =()=> {
     const [ cedula, setCedula ] = useState(localStorage.getItem('cedula'));
     const [ correo, setCorreo ] = useState(localStorage.getItem('correo'));
     const [ usuario_id, setUsuario_id ] = useState(localStorage.getItem('usuario_id'));
-    const [ titulo, setTitulo ] = useState(localStorage.getItem('titulo'));
-    const [ mensaje, setMensaje ] = useState(localStorage.getItem('mensaje'));
-    const [ noticia_id, setNoticia_id ] = useState(localStorage.getItem('noticia_id'));
-    const [ usuarioN_id, setUsuarioN_id ] = useState(localStorage.getItem('usuarioN_id'));
-    const [ usuarioN, setUsuarioN ] = useState(localStorage.getItem('usuarioN'));
+
+    // const [ titulo, setTitulo ] = useState(localStorage.getItem('titulo'));
+    // const [ mensaje, setMensaje ] = useState(localStorage.getItem('mensaje'));
+    // const [ noticia_id, setNoticia_id ] = useState(localStorage.getItem('noticia_id'));
+    // const [ usuarioN_id, setUsuarioN_id ] = useState(localStorage.getItem('usuarioN_id'));
+    // const [ usuarioN, setUsuarioN ] = useState(localStorage.getItem('usuarioN'));
 
 
     useEffect(()=>{
@@ -70,11 +72,11 @@ const Noticias =()=> {
         setCorreo(localStorage.getItem('correo'));
         setUsuario_id(localStorage.getItem('usuario_id'));
 
-        setTitulo(localStorage.getItem('titulo'));
-        setMensaje(localStorage.getItem('mensaje'));
-        setNoticia_id(localStorage.getItem('noticia_id'));
-        setUsuarioN_id(localStorage.getItem('usuarioN_id'));
-        setUsuarioN(localStorage.getItem('usuarioN'));
+        // setTitulo(localStorage.getItem('titulo'));
+        // setMensaje(localStorage.getItem('mensaje'));
+        // setNoticia_id(localStorage.getItem('noticia_id'));
+        // setUsuarioN_id(localStorage.getItem('usuarioN_id'));
+        // setUsuarioN(localStorage.getItem('usuarioN'));
 
 
     },[]);
@@ -85,12 +87,12 @@ const Noticias =()=> {
         apellido:apellido,
         nombre:nombre,
         cedula: cedula,
-        usuario_id: usuario_id,
-        titulo:titulo,
-        mensaje:mensaje,
-        noticia_id:noticia_id,
-        usuarioN_id: usuarioN_id,
-        usuarioN: usuarioN
+        usuario_id: usuario_id
+        // titulo:titulo,
+        // mensaje:mensaje,
+        // noticia_id:noticia_id,
+        // usuarioN_id: usuarioN_id,
+        // usuarioN: usuarioN
 
     });
 
@@ -115,16 +117,16 @@ const Noticias =()=> {
     //
     // }
 
+    let tit;
+    let i = 0;
+
     const inicial = async() =>{
 
         const info = await getNoticias();
 
-        console.log(info.getNoticias.titulo)
+        console.log()
         console.log(info.getNoticias)
         console.log(info.getNoticias.length)
-
-        let i = 0;
-        let tit;
 
         while (info.getNoticias.length > i){
 
@@ -134,18 +136,19 @@ const Noticias =()=> {
             });
         }
 
-        console.log(tit.noticia_id)
+        console.log(info.getNoticias[0].titulo)
+        localStorage.setItem('titulo', info.getNoticias[0].titulo);
 
-        localStorage.setItem('titulo', info.getNoticias.titulo);
-        localStorage.setItem('mensaje', info.getNoticias.mensaje);
-        localStorage.setItem('noticia_id', info.getNoticias.noticia_id);
-        localStorage.setItem('usuarioN_id', info.getNoticias.usuario_id);
+        // localStorage.setItem('titulo', info.getNoticias.titulo);
+        // localStorage.setItem('mensaje', info.getNoticias.mensaje);
+        // localStorage.setItem('noticia_id', info.getNoticias.noticia_id);
+        // localStorage.setItem('usuarioN_id', info.getNoticias.usuario_id);
 
-        const info_extra = await getUsuario(info.getNoticias.usuario_id);
+        // const info_extra = await getUsuario(info.getNoticias[0].usuario_id);
 
-        localStorage.setItem('usuarioN', info_extra.getUsuario.nombre);
+        // localStorage.setItem('usuarioN', info_extra.getUsuario.nombre);
 
-        console.log(info_extra.getUsuario.nombre)
+        // console.log(info_extra.getUsuario.nombre)
     }
 
     const handleChange = e =>{
@@ -231,11 +234,11 @@ const Noticias =()=> {
                 <label className={styles.labelI}
                        content={inicial()}
                 />
-                <Card className={styles.carta}>
+                <Card className={styles.carta} >
                     <CardHeader
                         avatar={
                             <Avatar aria-label="recipe" className={classes.avatar}>
-                                {usuarioN.substring(0)}
+                                {/*{tit[i].usuario_id.substring(0)}*/}
                             </Avatar>
                         }
                         action={
@@ -243,7 +246,7 @@ const Noticias =()=> {
                                 <MoreVertIcon />
                             </IconButton>
                         }
-                        title={titulo}
+                        title={localStorage.getItem("titulo")}
                         //subheader={localStorage.getItem("fecha")}
                     />
 
@@ -251,12 +254,12 @@ const Noticias =()=> {
                             <CardContent>
                                 <Typography paragraph>Method:</Typography>
                                 <Typography paragraph>
-                                    {mensaje}
+                                    {/*{tit[i].mensaje}*/}
                                 </Typography>
                             </CardContent>
                     </div>
 
-
+                    {i++}
                 </Card>
 
             </div>
