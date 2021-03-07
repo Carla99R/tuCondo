@@ -197,11 +197,7 @@ const resolvers ={
             }
         },
         async getEstatus(root, args, {models}) {
-            return models.estatus.findOne({
-                where:{
-                    estatus_id: args.estatus_id
-                }
-            })
+            return models.estatus.findAll()
         },
 
         async getTipoPago(root, args, {models}) {

@@ -32,6 +32,8 @@ const Pagos =()=> {
         setCorreo(localStorage.getItem('correo'));
         setUsuario_id(localStorage.getItem('usuario_id'));
         factura()
+        estados()
+
 
     },[]);
 
@@ -49,7 +51,6 @@ const Pagos =()=> {
     const [estatus_id, setEstatus_id] = useState([])
     const [estatus, setEstatus] = useState([])
 
-    const classes = useStyles();
 
 
     const factura = async() =>{
@@ -57,35 +58,32 @@ const Pagos =()=> {
         const response = await getFacturas(dato.usuario_id);
         setInfo(response.getFacturas)
 
+    }
 
-        const status =(info)=>(
-            info.map((est) =>(
-                setEstatus_id(est.estatus_id)
-            ))
-        )
+    const estados = async() =>{
 
-        // const descripcion =(estatus_id)=>(
-        //     estatus_id.map((est) =>(
-        //         // resp = await getEstatus(estatus_id)
-        //     ))
-        // )
+        const response = await getEstatus();
+        setEstatus(response.getEstatus)
 
+    }
 
-        setEstatus(resp.getEstatus)
+    const facturaStatus =(id) =>{
+        console.log(id);
+        console.log(estatus);
+        const ESTATUS  = estatus.find( r => r.estatus_id === id );
+        return ESTATUS;
 
-        console.log(info)
     }
 
 
-
-        const facturas =(info)=>(
+    const facturas =(info)=>(
 
             info.map((factura)=>(
                 <tbody>
                 <tr className={styles.border}>
                     <td className={styles.borde}>{factura.factura_id}</td>
                     <td className={styles.borde}> {factura.monto_total}</td>
-                    <td className={styles.borde}>{factura.estatus_id}</td>
+                    <td className={styles.borde}>{ facturaStatus(factura.estatus_id).descripcion }</td>
                 </tr>
                 </tbody>
         )
@@ -118,7 +116,7 @@ const Pagos =()=> {
 
     };
 
-    async function getEstatus(estatus_id) { //Función asincrona para consumir datos de la API
+    async function getEstatus() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
             uri: `http://localhost:9600/graphql`,
@@ -129,7 +127,8 @@ const Pagos =()=> {
         const {data} = await client.query({ // Query de graphql
             query: gql`
                         query{
-                            getEstatus(usuario_id: ${estatus_id}){
+                            getEstatus{
+                                estatus_id
                                 descripcion
                                 }
                           }

@@ -75,6 +75,7 @@ const typeDefs = gql`
         getCondominios(usuario_id: Int): [Condominio]
         getPagos(factura_id: Int): [Pago]
         getFacturas(usuario_id: Int): [Factura]
+        getEstatus: [Estatus]
 
         getUsuario(cedula: String, correo: String): Usuario
         getUsuarioLogin(cedula: String, correo: String, psw: String): Usuario
@@ -82,7 +83,7 @@ const typeDefs = gql`
         getCondominio(usuario_id: Int, nombre: String): Condominio
         getEdificio(condominio_id: Int, nombre: String): Edificio
         getFactura(factura_id: Int, usuario_id: Int): Factura
-        getEstatus(estatus_id: Int): Estatus
+        
         getTipoPago(tipoPago_id: Int): TipoPago
 
     }
