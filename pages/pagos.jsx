@@ -1,12 +1,9 @@
 import React, { useEffect, useState} from 'react';
-import {TextField} from "@material-ui/core";
 import styles from '../styles/adminCondominios.module.css'
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
-import {useForm} from "react-hook-form";
 import {makeStyles} from "@material-ui/core/styles";
 import NavbarInicio from "../components/navbarInicio";
 import Image from "next/image";
-import {Spinner} from "react-bootstrap";
 import Table from "@material-ui/core/Table";
 
 const Pagos =()=> {
@@ -26,7 +23,6 @@ const Pagos =()=> {
     const [ correo, setCorreo ] = useState(localStorage.getItem('correo'));
     const [ usuario_id, setUsuario_id ] = useState(localStorage.getItem('usuario_id'));
 
-    const [ loading, setLoading ] = useState(true);
 
 
     useEffect(()=>{
@@ -35,8 +31,7 @@ const Pagos =()=> {
         setCedula(localStorage.getItem('cedula'));
         setCorreo(localStorage.getItem('correo'));
         setUsuario_id(localStorage.getItem('usuario_id'));
-        setLoading(true);
-
+        factura()
 
     },[]);
 
@@ -50,21 +45,54 @@ const Pagos =()=> {
 
     });
 
+    const [info, setInfo] = useState([])
+    const [estatus_id, setEstatus_id] = useState([])
+    const [estatus, setEstatus] = useState([])
+
     const classes = useStyles();
 
 
-    const inicial = async() =>{
+    const factura = async() =>{
 
-        const info = await getInitialProps(dato.usuario_id);
-
-        console.log(info.getApartamento.nombre)
-        console.log(info.getApartamento)
+        const response = await getFacturas(dato.usuario_id);
+        setInfo(response.getFacturas)
 
 
+        const status =(info)=>(
+            info.map((est) =>(
+                setEstatus_id(est.estatus_id)
+            ))
+        )
 
+        // const descripcion =(estatus_id)=>(
+        //     estatus_id.map((est) =>(
+        //         // resp = await getEstatus(estatus_id)
+        //     ))
+        // )
+
+
+        setEstatus(resp.getEstatus)
+
+        console.log(info)
     }
 
-    async function getFacturas(nombre, apellido, correo) { //Función asincrona para consumir datos de la API
+
+
+        const facturas =(info)=>(
+
+            info.map((factura)=>(
+                <tbody>
+                <tr className={styles.border}>
+                    <td className={styles.borde}>{factura.factura_id}</td>
+                    <td className={styles.borde}> {factura.monto_total}</td>
+                    <td className={styles.borde}>{factura.estatus_id}</td>
+                </tr>
+                </tbody>
+        )
+
+    ))
+
+    async function getFacturas() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
             uri: `http://localhost:9600/graphql`,
@@ -170,7 +198,7 @@ const Pagos =()=> {
 
     return (
 
-        <div className={styles.toda}>
+        <div className={styles.all}>
 
             <div className={styles.orden}>
                 <Image className={styles.fondo}
@@ -181,35 +209,18 @@ const Pagos =()=> {
                 <NavbarInicio/>
             </div>
 
-            <div className={styles.todo}>
-
-                <Table striped bordered hover>
+            <div className={styles.tabla}>
+                <Table striped bordered hover >
                     <thead>
-                    <tr>
-                        <th>Factura ID</th>
-                        <th>Monto total</th>
-                        <th>Estatus</th>
+                    <tr className={styles.border}>
+                        <th className={styles.border}>Factura ID</th>
+                        <th className={styles.border}>Monto total</th>
+                        <th className={styles.border}>Estatus</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td colSpan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                    </tbody>
+
+                    {info && facturas(info)}
+
                 </Table>
 
             </div>
