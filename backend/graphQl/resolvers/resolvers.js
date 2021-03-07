@@ -56,6 +56,13 @@ const resolvers ={
                         eliminado: false
                     }
                 })
+            }else if(args.usuario_id){
+                return models.usuario.findOne({
+                    where: {
+                        usuario_id: args.usuario_id,
+                        eliminado: false
+                    }
+                })
             }
         },
 
@@ -163,7 +170,14 @@ const resolvers ={
                     }
                 })
             }
-        }
+        },
+        async getNoticias(root, args, {models}) {
+            return models.noticia.findAll({
+                where:{
+                    eliminado: false
+                }
+            })
+        },
 
     },
 
@@ -179,6 +193,10 @@ const resolvers ={
         },
         async createApartamento(root, {nombre, eliminado, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id},{models}){
             return await models.apartamento.create({nombre, eliminado, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id})
+        },
+
+        async createNoticia(root, {titulo, mensaje, usuario_id, eliminado},{models}){
+            return await models.noticia.create({titulo, mensaje, usuario_id, eliminado})
         },
 
 
@@ -220,6 +238,16 @@ const resolvers ={
             console.log(eliminado)
             await models.usuario.update(eliminado, {where: {apartamento_id:args.apartamento_id}})
             return models.usuario.findByPk(args.apartamento_id)
+        },
+
+        async deleteNoticia(root, args, {models}){
+
+            const eliminado = {
+                eliminado: true
+            };
+            console.log(eliminado)
+            await models.usuario.update(eliminado, {where: {noticia_id:args.noticia_id}})
+            return models.usuario.findByPk(args.noticia_id)
         },
 
         async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id

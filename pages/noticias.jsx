@@ -56,6 +56,11 @@ const Noticias =()=> {
     const [ cedula, setCedula ] = useState(localStorage.getItem('cedula'));
     const [ correo, setCorreo ] = useState(localStorage.getItem('correo'));
     const [ usuario_id, setUsuario_id ] = useState(localStorage.getItem('usuario_id'));
+    const [ titulo, setTitulo ] = useState(localStorage.getItem('titulo'));
+    const [ mensaje, setMensaje ] = useState(localStorage.getItem('mensaje'));
+    const [ noticia_id, setNoticia_id ] = useState(localStorage.getItem('noticia_id'));
+    const [ usuarioN_id, setUsuarioN_id ] = useState(localStorage.getItem('usuarioN_id'));
+    const [ usuarioN, setUsuarioN ] = useState(localStorage.getItem('usuarioN'));
 
 
     useEffect(()=>{
@@ -64,6 +69,12 @@ const Noticias =()=> {
         setCedula(localStorage.getItem('cedula'));
         setCorreo(localStorage.getItem('correo'));
         setUsuario_id(localStorage.getItem('usuario_id'));
+
+        setTitulo(localStorage.getItem('titulo'));
+        setMensaje(localStorage.getItem('mensaje'));
+        setNoticia_id(localStorage.getItem('noticia_id'));
+        setUsuarioN_id(localStorage.getItem('usuarioN_id'));
+        setUsuarioN(localStorage.getItem('usuarioN'));
 
 
     },[]);
@@ -74,13 +85,19 @@ const Noticias =()=> {
         apellido:apellido,
         nombre:nombre,
         cedula: cedula,
-        usuario_id: usuario_id
+        usuario_id: usuario_id,
+        titulo:titulo,
+        mensaje:mensaje,
+        noticia_id:noticia_id,
+        usuarioN_id: usuarioN_id,
+        usuarioN: usuarioN
 
     });
 
     const {register, handleSubmit, errors} = useForm({
         reValidateMode:'onSubmit'
     });
+
 
     // const onSubmit = async() =>{
     //
@@ -100,21 +117,35 @@ const Noticias =()=> {
 
     const inicial = async() =>{
 
-        const info = await getInitialProps(dato.usuario_id);
+        const info = await getNoticias();
 
-        console.log(info.getApartamento.nombre)
-        console.log(info.getApartamento)
+        console.log(info.getNoticias.titulo)
+        console.log(info.getNoticias)
+        console.log(info.getNoticias.length)
 
-        localStorage.setItem('nombreA', info.getApartamento.nombre);
-        localStorage.setItem('alicuota', info.getApartamento.alicuota);
-        localStorage.setItem('dimensiones', info.getApartamento.dimensiones);
+        let i = 0;
+        let tit;
 
-        if(info.getApartamento.is_alquilado === true){
-            localStorage.setItem('is_alquilado', "Sí");
-        }else{
-            localStorage.setItem('is_alquilado', "No");
+        while (info.getNoticias.length > i){
+
+             tit = info.getNoticias.map(function(title) {
+                i++;
+                return title;
+            });
         }
 
+        console.log(tit.noticia_id)
+
+        localStorage.setItem('titulo', info.getNoticias.titulo);
+        localStorage.setItem('mensaje', info.getNoticias.mensaje);
+        localStorage.setItem('noticia_id', info.getNoticias.noticia_id);
+        localStorage.setItem('usuarioN_id', info.getNoticias.usuario_id);
+
+        const info_extra = await getUsuario(info.getNoticias.usuario_id);
+
+        localStorage.setItem('usuarioN', info_extra.getUsuario.nombre);
+
+        console.log(info_extra.getUsuario.nombre)
     }
 
     const handleChange = e =>{
@@ -125,11 +156,11 @@ const Noticias =()=> {
 
     }
 
-    async function getInitialProps() { //Función asincrona para consumir datos de la API
+    async function getNoticias() { //Función asincrona para consumir datos de la API
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9500/graphql`,
+            uri: `http://localhost:9600/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -137,11 +168,12 @@ const Noticias =()=> {
         const {data} = await client.query({ // Query de graphql
             query: gql`
                         query{
-                            getApartamento(usuario_id: ${usuario_id}){
-                                nombre
-                                alicuota
-                                is_alquilado
-                                dimensiones
+                            getNoticias{
+                                titulo
+                                mensaje
+                                eliminado
+                                usuario_id
+                                noticia_id
                                 }
                           }
                         `,
@@ -150,6 +182,33 @@ const Noticias =()=> {
         console.log('data:', data)
 
         return data;
+
+    };
+
+    async function getUsuario(usuario_id) { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9600/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // async function getStaticsPropss(correo, psw, res) {
+
+        // try{
+        const {dat} = await client.query({ // Query de graphql
+            query: gql`
+                        query{
+                            getUsuario(usuario_id: "${usuario_id}"){
+                              nombre
+                              apellido
+                            }
+                          }
+                        `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', dat)
+
+        return dat;
 
     };
 
@@ -169,11 +228,14 @@ const Noticias =()=> {
             </div>
 
             <div className={styles.tod}>
-                <Card className={classnames(`${classes.root}, ${styles.carta}`)}>
+                <label className={styles.labelI}
+                       content={inicial()}
+                />
+                <Card className={styles.carta}>
                     <CardHeader
                         avatar={
                             <Avatar aria-label="recipe" className={classes.avatar}>
-                                R
+                                {usuarioN.substring(0)}
                             </Avatar>
                         }
                         action={
@@ -181,40 +243,15 @@ const Noticias =()=> {
                                 <MoreVertIcon />
                             </IconButton>
                         }
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
+                        title={titulo}
+                        //subheader={localStorage.getItem("fecha")}
                     />
-                    <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            This impressive paella is a perfect party dish and a fun meal to cook together with your
-                            guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                        </Typography>
-                    </CardContent>
 
                     <div className={styles.scroll}>
                             <CardContent>
                                 <Typography paragraph>Method:</Typography>
                                 <Typography paragraph>
-                                    Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                                    minutes.
-                                </Typography>
-                                <Typography paragraph>
-                                    Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-                                    heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-                                    browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-                                    and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-                                    pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-                                    saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-                                </Typography>
-                                <Typography paragraph>
-                                    Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-                                    without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-                                    medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-                                    again without stirring, until mussels have opened and rice is just tender, 5 to 7
-                                    minutes more. (Discard any mussels that don’t open.)
-                                </Typography>
-                                <Typography>
-                                    Set aside off of the heat to let rest for 10 minutes, and then serve.
+                                    {mensaje}
                                 </Typography>
                             </CardContent>
                     </div>

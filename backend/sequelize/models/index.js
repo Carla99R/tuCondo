@@ -12,7 +12,9 @@ const models ={
     usuario: sequelize.import('./usuario'),
     edificio: sequelize.import('./edificio'),
     condominio: sequelize.import('./condominio'),
-    apartamento: sequelize.import('./apartamento')
+    apartamento: sequelize.import('./apartamento'),
+    noticia: sequelize.import('./noticia')
+
 
 }
 

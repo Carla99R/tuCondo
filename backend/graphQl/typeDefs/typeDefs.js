@@ -39,6 +39,14 @@ const typeDefs = gql`
         edificio_id: Int!
     }
     
+    type Noticia{
+        noticia_id: Int!,
+        titulo: String!,
+        mensaje: String!,
+        usuario_id: Int!,
+        eliminado: Boolean!
+    }
+    
     
     type Query{
     
@@ -46,6 +54,7 @@ const typeDefs = gql`
         getApartamentos: [Apartamento]
         getEdificios: [Edificio]
         getCondominios(usuario_id: Int): [Condominio]
+        getNoticias: [Noticia]
         
         getUsuario(cedula: String, correo: String): Usuario
         getUsuarioLogin(cedula: String, correo: String, psw: String): Usuario
@@ -60,13 +69,14 @@ const typeDefs = gql`
         createCondominio(nombre: String!, eliminado: Boolean!, usuario_id: Int!): Condominio!
         createEdificio(nombre: String!, num_pisos: String!,eliminado: Boolean!, condominio_id: Int!): Edificio!
         createApartamento(nombre: String!, alicuota: String!, is_alquilado: Boolean!, dimensiones: String!, eliminado: Boolean!, usuario_id: Int!, edificio_id: Int!): Apartamento!
-
+        createNoticia(titulo: String!, eliminado: Boolean!, usuario_id: Int!, mensaje: String!): Noticia!
 
         deleteUsuario(usuario_id: Int!): Usuario!
         deleteCondominio(condominio_id: Int!): Usuario!
         deleteEdificio(edificio_id: Int!):Edificio!
         deleteApartamento(apartamento_id: Int!): Apartamento!
-        
+        deleteNoticia(noticia_id: Int!): Noticia!
+
         
         updateUsuario(usuario_id: Int!, nombre: String, apellido: String, correo: String): Usuario!
         updateCondominio(condominio_id: Int!, nombre: String): Condominio!
