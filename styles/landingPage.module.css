@@ -39,31 +39,13 @@
     padding-right: 5%;
 }
 
-#inicio{
+#inicio, #nosotros, #info, #admin {
     cursor: pointer;
     color:rgba(103,103,103,0.98);
 }
 
-#inicio:focus{
-    color: black;
-}
-
-#nosotros{
-    cursor: pointer;
-    color:rgba(103,103,103,0.98);
-}
-
-#nosotros:focus{
+#inicio:focus, #nosotros:focus, #info:focus, #admin:focus {
     color:  black;
-}
-
-#info{
-    cursor: pointer;
-    color:rgba(103,103,103,0.98);
-}
-
-#info:focus{
-    color: black;
 }
 
 .login{

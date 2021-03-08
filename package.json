@@ -29,7 +29,7 @@
     "react-dom": "17.0.1",
     "react-input-mask": "^2.0.4",
     "sequelize": "^5.15.1",
-    "sequelize-cli": "^5.4.0",
+    "sequelize-cli": "^5.5.1",
     "sharp": "^0.26.3",
     "webpack": "^4.46.0"
   },
