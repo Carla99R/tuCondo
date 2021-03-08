@@ -41,16 +41,22 @@ const typeDefs = gql`
     
     type Pago{
         pago_id: Int!,
-        factura_id: Int!,
+        factura_id: Factura!,
         currency: String!,
         conversion: String!,
-        monto: String!,
+        monto_usd: String!,
+        monto_bss: String!,
         tipoPago_id: Int!,
+    }
+
+    type TipoPago{
+        tipoPago_id: Int!,
+        descripcion: String!
     }
     
     type Factura{
         factura_id: Int!,
-        usuario_id: Int!,
+        usuario_id: Usuario!,
         monto_total: String!,
         estatus_id: Int!
     }
@@ -59,12 +65,19 @@ const typeDefs = gql`
         estatus_id: Int!,
         descripcion: String!
     }
-    
-    type TipoPago{
-        tipoPago_id: Int!,
-        descripcion: String!
+
+    type Alquiler{
+        alquiler_id: Int!,
+        usuario_id: Int!,
+        tipoAlquiler_id: Int!,
     }
-    
+
+    type TipoAlquiler{
+        tipoAlquiler_id: Int!,
+        descripcion: String!,
+        precio_usd: Int!,
+        estatus_id: Int!
+    }
     
     
     type Query{
@@ -75,7 +88,10 @@ const typeDefs = gql`
         getCondominios(usuario_id: Int): [Condominio]
         getPagos(factura_id: Int): [Pago]
         getFacturas(usuario_id: Int): [Factura]
+        getAlquileres(usuario_id: Int): [Alquiler]
+        getTipoAlquileres: [TipoAlquiler]
         getEstatus: [Estatus]
+
 
         getUsuario(cedula: String, correo: String): Usuario
         getUsuarioLogin(cedula: String, correo: String, psw: String): Usuario
@@ -83,8 +99,9 @@ const typeDefs = gql`
         getCondominio(usuario_id: Int, nombre: String): Condominio
         getEdificio(condominio_id: Int, nombre: String): Edificio
         getFactura(factura_id: Int, usuario_id: Int): Factura
-        
         getTipoPago(tipoPago_id: Int): TipoPago
+        getTipoAlquiler(tipoAlquiler_id: Int, precio_usd: String): TipoAlquiler
+
 
     }
     
@@ -95,7 +112,9 @@ const typeDefs = gql`
         createApartamento(nombre: String!, alicuota: String!, is_alquilado: Boolean!, dimensiones: String!, eliminado: Boolean!, usuario_id: Int!, edificio_id: Int!): Apartamento!
         createPago(tipoPago_id: Int!, factura_id: Int!, currency: String!, conversion: String!, monto: String!): Pago!
         createFactura(usuario_id: Int!, monto_total: String!): Factura!
-        
+        createAlquiler(usuario_id: Int!, tipoAlquiler_id: Int!): Alquiler!
+
+
         deleteUsuario(usuario_id: Int!): Usuario!
         deleteCondominio(condominio_id: Int!): Usuario!
         deleteEdificio(edificio_id: Int!):Edificio!
@@ -107,6 +126,8 @@ const typeDefs = gql`
         updateEdificio(edificio_id: Int!, nombre: String, num_pisos: Int): Edificio!
         updateApartamento(apartamento_id: Int!, nombre: String, alicuota: String, is_alquilado: Boolean, dimensiones: String): Apartamento!
         updateFactura(factura_id: Int!, estatus: String): Factura!
+        updateTipoAlquiler(tipoAlquiler_id: Int!, estatus: String): TipoAlquiler!
+
 
 
 

@@ -17,7 +17,10 @@ const models ={
     pago: sequelize.import('./pago'),
     tipoPago: sequelize.import('./tipoPago'),
     factura: sequelize.import('./factura'),
-    estatus: sequelize.import('./estatus')
+    estatus: sequelize.import('./estatus'),
+
+    alquiler: sequelize.import('./alquiler'),
+    tipoAlquiler: sequelize.import('./tipoAlquiler')
 
 }
 
