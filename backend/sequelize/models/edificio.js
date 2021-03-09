@@ -18,7 +18,7 @@ module.exports =(sequelize, DataTypes)=>{
         },
         eliminado:{
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: true
         },
         condominio_id:{
             type: DataTypes.INTEGER,

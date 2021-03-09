@@ -14,6 +14,10 @@ module.exports =(sequelize, DataTypes)=>{
             foreignKey: true,
             references: models.usuario
         },
+        eliminado:{
+            type: DataTypes.BOOLEAN,
+            allowNull: true
+        },
         tipoAlquiler_id:{
             type: DataTypes.INTEGER,
             allowNull: false,

@@ -26,7 +26,7 @@ module.exports =(sequelize, DataTypes)=>{
         },
         eliminado:{
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: true
         },
         usuario_id:{
             type: DataTypes.INTEGER,

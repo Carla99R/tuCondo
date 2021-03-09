@@ -28,7 +28,7 @@ module.exports =(sequelize, DataTypes)=>{
         },
         eliminado:{
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: true
         },
         psw:{
             type: DataTypes.STRING,

@@ -104,7 +104,12 @@ const resolvers ={
         },
 
         async getEdificios(root, args, {models}) {
-            return models.edificio.findAll()
+            return models.edificio.findAll({
+                where:{
+                    condominio_id: args.condominio_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getEdificio(root, args, {models}) {
@@ -134,7 +139,12 @@ const resolvers ={
         },
 
         async getApartamentos(root, args, {models}) {
-            return models.apartamento.findAll()
+            return models.apartamento.findAll({
+                where: {
+                    edificio_id: args.edificio_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getApartamento(root, args, {models}) {
@@ -227,38 +237,35 @@ const resolvers ={
         },
 
         async getTipoAlquileres(root, args, {models}) {
-            return models.tipoAlquiler.findAll({
-                where:{
-                    estatus_id: 4
-                }
-            })
+            return models.tipoAlquiler.findAll()
         },
 
         async getAlquileres(root, args, {models}) {
                 return models.alquiler.findAll({
                     where:{
-                        usuario_id: args.usuario_id
+                        usuario_id: args.usuario_id,
+                        eliminado: false
                     }
                 })
             }
 
     },
     Mutation: {
-        async createUsuario(root, {nombre, apellido, is_admin, correo, cedula, eliminado},{models}){
-            return await models.usuario.create({nombre, apellido, is_admin, correo, cedula, eliminado})
+        async createUsuario(root, {nombre, apellido, is_admin, correo, cedula},{models}){
+            return await models.usuario.create({nombre, apellido, is_admin, correo, cedula})
         },
-        async createCondominio(root, {nombre, eliminado, usuario_id},{models}){
-            return await models.condominio.create({nombre, eliminado, usuario_id})
+        async createCondominio(root, {nombre, usuario_id},{models}){
+            return await models.condominio.create({nombre, usuario_id})
         },
-        async createEdificio(root, {nombre, eliminado, num_pisos, condominio_id},{models}){
-            return await models.edificio.create({nombre, eliminado, num_pisos, condominio_id})
+        async createEdificio(root, {nombre, num_pisos, condominio_id},{models}){
+            return await models.edificio.create({nombre, num_pisos, condominio_id})
         },
-        async createApartamento(root, {nombre, eliminado, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id},{models}){
-            return await models.apartamento.create({nombre, eliminado, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id})
+        async createApartamento(root, {nombre, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id},{models}){
+            return await models.apartamento.create({nombre, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id})
         },
 
-        async createPago(root, {tipoPago_id, factura_id, currency, conversion, monto},{models}){
-            return await models.pago.create({tipoPago_id, factura_id, currency, conversion, monto})
+        async createPago(root, {tipoPago_id, factura_id, currency, conversion, monto_usd, monto_bss},{models}){
+            return await models.pago.create({tipoPago_id, factura_id, currency, conversion, monto_usd, monto_bss})
         },
 
         async createFactura(root, {usuario_id, monto_total},{models}){
@@ -285,7 +292,7 @@ const resolvers ={
                 eliminado: true
             };
             console.log(eliminado)
-            await models.condominio.update(eliminado, {where: {condominio_id:args.condominio_id}})
+            await models.condominio.update(eliminado, {where: {condominio_id: args.condominio_id}})
             return models.condominio.findByPk(args.condominio_id)
         },
 
@@ -307,6 +314,26 @@ const resolvers ={
             console.log(eliminado)
             await models.apartamento.update(eliminado, {where: {apartamento_id:args.apartamento_id}})
             return models.apartamento.findByPk(args.apartamento_id)
+        },
+
+        async deleteAlquiler(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
+
+            const eliminado = {
+                eliminado: true
+            };
+            console.log(eliminado)
+            await models.alquiler.update(eliminado, {where: {alquiler_id:args.alquiler_id}})
+            return models.alquiler.findByPk(args.alquiler_id)
+        },
+
+        async deletePago(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
+
+            const eliminado = {
+                eliminado: true
+            };
+            console.log(eliminado)
+            await models.pago.update(eliminado, {where: {pago_id:args.pago_id}})
+            return models.pago.findByPk(args.pago_id)
         },
 
         async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id
@@ -358,7 +385,7 @@ const resolvers ={
         async updateFactura(root, args, {models}){
 
             const actualizacion = {
-                estatus:args.estatus
+                estatus_id:args.estatus_id
             };
             console.log(actualizacion)
             await models.factura.update(actualizacion, {where: {factura_id:args.factura_id}})
@@ -368,7 +395,7 @@ const resolvers ={
         async updateTipoAlquiler(root, args, {models}){
 
             const actualizacion = {
-                estatus:args.estatus
+                estatus_id:args.estatus_id
             };
             console.log(actualizacion)
             await models.tipoAlquiler.update(actualizacion, {where: {tipoAlquiler_id:args.tipoAlquiler_id}})

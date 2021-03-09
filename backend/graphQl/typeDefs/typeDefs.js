@@ -70,6 +70,7 @@ const typeDefs = gql`
     type Alquiler{
         alquiler_id: Int!,
         usuario_id: Int!,
+        eliminado: Boolean!,
         tipoAlquiler_id: Int!,
     }
 
@@ -84,8 +85,8 @@ const typeDefs = gql`
     type Query{
     
         getUsuarios: [Usuario]
-        getApartamentos: [Apartamento]
-        getEdificios: [Edificio]
+        getApartamentos(edificio_id: Int): [Apartamento]
+        getEdificios(condominio_id: Int): [Edificio]
         getCondominios(usuario_id: Int): [Condominio]
         getPagos(factura_id: Int): [Pago]
         getFacturas(usuario_id: Int): [Factura]
@@ -111,23 +112,26 @@ const typeDefs = gql`
         createCondominio(nombre: String!, eliminado: Boolean!, usuario_id: Int!): Condominio!
         createEdificio(nombre: String!, num_pisos: String!,eliminado: Boolean!, condominio_id: Int!): Edificio!
         createApartamento(nombre: String!, alicuota: String!, is_alquilado: Boolean!, dimensiones: String!, eliminado: Boolean!, usuario_id: Int!, edificio_id: Int!): Apartamento!
-        createPago(tipoPago_id: Int!, factura_id: Int!, currency: String!, conversion: String!, monto: String!): Pago!
+        createPago(tipoPago_id: Int!, factura_id: Int!, currency: String!, conversion: String!, monto_usd: String!, monto_bss: String!): Pago!
         createFactura(usuario_id: Int!, monto_total: String!): Factura!
         createAlquiler(usuario_id: Int!, tipoAlquiler_id: Int!): Alquiler!
 
 
         deleteUsuario(usuario_id: Int!): Usuario!
-        deleteCondominio(condominio_id: Int!): Usuario!
+        deleteCondominio(condominio_id: Int!): Condominio!
         deleteEdificio(edificio_id: Int!):Edificio!
         deleteApartamento(apartamento_id: Int!): Apartamento!
+        deleteAlquiler(alquiler_id: Int!): Alquiler!
+        deletePago(pago_id: Int!): Pago!
 
-        
+
+
         updateUsuario(usuario_id: Int!, nombre: String, apellido: String, correo: String): Usuario!
         updateCondominio(condominio_id: Int!, nombre: String): Condominio!
         updateEdificio(edificio_id: Int!, nombre: String, num_pisos: Int): Edificio!
         updateApartamento(apartamento_id: Int!, nombre: String, alicuota: String, is_alquilado: Boolean, dimensiones: String): Apartamento!
-        updateFactura(factura_id: Int!, estatus: String): Factura!
-        updateTipoAlquiler(tipoAlquiler_id: Int!, estatus: String): TipoAlquiler!
+        updateFactura(factura_id: Int!, estatus_id: Int): Factura!
+        updateTipoAlquiler(tipoAlquiler_id: Int!, estatus_id: Int): TipoAlquiler!
 
 
 

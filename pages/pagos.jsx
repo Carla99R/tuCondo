@@ -106,6 +106,13 @@ const facturas =(info)=>(
                 >
                     Ver Detalles
                 </button>
+                <button
+                    className={styles.bot}
+                    onClick={(e) => pago(factura.factura_id, e)}
+                    type="submit"
+                >
+                    Pagar
+                </button>
 
             </tr>
             </tbody>
@@ -121,7 +128,7 @@ const facturas =(info)=>(
 async function getFacturas() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9700/graphql`,
+        uri: `http://localhost:9800/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -148,7 +155,7 @@ async function getFacturas() { //Función asincrona para consumir datos de la AP
 async function getEstatus() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9700/graphql`,
+        uri: `http://localhost:9800/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -173,7 +180,7 @@ async function getEstatus() { //Función asincrona para consumir datos de la API
 async function getPagos(factura_id) { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9700/graphql`,
+        uri: `http://localhost:9800/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -202,7 +209,7 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
 async function getTipoPago() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9700/graphql`,
+        uri: `http://localhost:9800/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -223,6 +230,31 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
     return data;
 
 };
+
+    async function updateFactura(factura_id, estatus) { //Función asincrona para consumir datos de la API
+
+        console.log(nombre)
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9800/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // try{
+        const {data} = await client.mutate({ // Query de graphql
+            mutation: gql`
+                mutation {
+                    updateFactura(factura_id: ${factura_id}, estatus_id: ${estatus}){
+                        factura_id
+                    }
+                }
+            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
 
     const submit = async(interdata) =>{
 
@@ -245,6 +277,16 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
         setOpen(true);
 
 
+    }
+
+    const pago = async(interdata) =>{
+
+        console.log(interdata)
+
+        const est = await getEstatus();
+        const res = est.getEstatus.find(r =>r.descripcion === "PAGADO").estatus_id
+
+        const p = await updateFactura(interdata, res);
     }
 
     const pagar =(pagos)=>(
