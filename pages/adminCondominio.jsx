@@ -17,13 +17,6 @@ const AdminCondominio=()=>{
     return(
         <ClientState>
             <div className={styles.orden}>
-                <figure className={styles.logo}>
-                    <Image src="/DonBarriga.png" alt="logo" className={styles.imagen}
-                           width={120}
-                           height={120}
-                    />
-                </figure>
-                <div>{name}</div>
                 <CollapsibleTable/>
             </div>
         </ClientState>

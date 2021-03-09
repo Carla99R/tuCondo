@@ -70,8 +70,8 @@ const typeDefs = gql`
     type Query{
     
         getUsuarios: [Usuario]
-        getApartamentos: [Apartamento]
-        getEdificios: [Edificio]
+        getApartamentos(edificio_id: Int): [Apartamento]
+        getEdificios(condominio_id: Int): [Edificio]
         getCondominios(usuario_id: Int): [Condominio]
         getPagos(factura_id: Int): [Pago]
         getFacturas(usuario_id: Int): [Factura]
@@ -97,7 +97,7 @@ const typeDefs = gql`
         createFactura(usuario_id: Int!, monto_total: String!): Factura!
         
         deleteUsuario(usuario_id: Int!): Usuario!
-        deleteCondominio(condominio_id: Int!): Usuario!
+        deleteCondominio(condominio_id: Int!): Condominio!
         deleteEdificio(edificio_id: Int!):Edificio!
         deleteApartamento(apartamento_id: Int!): Apartamento!
 

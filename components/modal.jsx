@@ -101,7 +101,7 @@ export default function TransitionsModal()  {
      async function validUsuario(correo, psw) { //Función asincrona para consumir datos de la API
 
          const client = new ApolloClient({ // Cliente de Apolo
-             uri: `http://localhost:9600/graphql`,
+             uri: `http://localhost:9800/graphql`,
              cache: new InMemoryCache()
          });
 

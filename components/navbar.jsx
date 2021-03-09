@@ -23,7 +23,7 @@ const NavBar =() =>{
                     <Link href="/" scroll={true}>
                         <a id={styles.inicio}>Inicio</a>
                     </Link>
-                    <Link href="/adminCondominio" scroll={true}>
+                    <Link href="/Nosotros" scroll={true}>
                         <a id={styles.nosotros}>Nosotros</a>
                     </Link>
                     <Link href="/Informacion" scroll={true}>

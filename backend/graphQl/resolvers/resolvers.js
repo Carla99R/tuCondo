@@ -1,3 +1,5 @@
+const { ArrowForwardTwoTone } = require("@material-ui/icons")
+
 const resolvers ={
 
     Query: {
@@ -104,7 +106,12 @@ const resolvers ={
         },
 
         async getEdificios(root, args, {models}) {
-            return models.edificio.findAll()
+            return models.edificio.findAll({
+                where:  {
+                    condominio_id: args.condominio_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getEdificio(root, args, {models}) {
@@ -134,7 +141,12 @@ const resolvers ={
         },
 
         async getApartamentos(root, args, {models}) {
-            return models.apartamento.findAll()
+            return models.apartamento.findAll({
+                where:  {
+                    edificio_id: args.edificio_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getApartamento(root, args, {models}) {
@@ -249,8 +261,8 @@ const resolvers ={
                 eliminado: true
             };
             console.log(eliminado)
-            await models.usuario.update(eliminado, {where: {condominio_id:args.condominio_id}})
-            return models.usuario.findByPk(args.condominio_id)
+            await models.condominio.update(eliminado, {where: {condominio_id:args.condominio_id}})
+            return models.condominio.findByPk(args.condominio_id)
         },
 
         async deleteEdificio(root, args, {models}){     // TODO al seleccionar el edificio puedo obtener el condominio_id
@@ -259,8 +271,8 @@ const resolvers ={
                 eliminado: true
             };
             console.log(eliminado)
-            await models.usuario.update(eliminado, {where: {edificio_id:args.edificio_id}})
-            return models.usuario.findByPk(args.edificio_id)
+            await models.edificio.update(eliminado, {where: {edificio_id:args.edificio_id}})
+            return models.edificio.findByPk(args.edificio_id)
         },
 
         async deleteApartamento(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
@@ -269,8 +281,8 @@ const resolvers ={
                 eliminado: true
             };
             console.log(eliminado)
-            await models.usuario.update(eliminado, {where: {apartamento_id:args.apartamento_id}})
-            return models.usuario.findByPk(args.apartamento_id)
+            await models.apartamento.update(eliminado, {where: {apartamento_id:args.apartamento_id}})
+            return models.apartamento.findByPk(args.apartamento_id)
         },
 
         async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id
@@ -291,8 +303,8 @@ const resolvers ={
                 nombre:args.nombre
             };
             console.log(actualizacion)
-            await models.usuario.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}}) //TODO el condominio_id lo obtengo cuando selecciono el condominio a modificar y le doy a modificar, ahi se ejecuta el getCondominio
-            return models.usuario.findByPk(args.condominio_id)
+            await models.condominio.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}}) //TODO el condominio_id lo obtengo cuando selecciono el condominio a modificar y le doy a modificar, ahi se ejecuta el getCondominio
+            return models.condominio.findByPk(args.condominio_id)
         },
 
         async updateEdificio(root, args, {models}){
@@ -302,8 +314,8 @@ const resolvers ={
                 num_pisos:args.num_pisos
             };
             console.log(actualizacion)
-            await models.usuario.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}}) //TODO el edificio_id lo obtengo cuando selecciono el edificio a modificar y le doy a modificar, ahi se ejecuta el getEdificio
-            return models.usuario.findByPk(args.edificio_id)
+            await models.edificio.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}}) //TODO el edificio_id lo obtengo cuando selecciono el edificio a modificar y le doy a modificar, ahi se ejecuta el getEdificio
+            return models.edificio.findByPk(args.edificio_id)
         },
 
         async updateApartamento(root, args, {models}){
@@ -315,8 +327,8 @@ const resolvers ={
                 dimensiones:args.dimensiones
             };
             console.log(actualizacion)
-            await models.usuario.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}}) //TODO el apartamento_id lo obtengo cuando selecciono el apartamento a modificar y le doy a modificar, ahi se ejecuta el getApartamento
-            return models.usuario.findByPk(args.apartamento_id)
+            await models.apartamento.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}}) //TODO el apartamento_id lo obtengo cuando selecciono el apartamento a modificar y le doy a modificar, ahi se ejecuta el getApartamento
+            return models.apartamento.findByPk(args.apartamento_id)
         },
 
         async updateFactura(root, args, {models}){
@@ -325,8 +337,8 @@ const resolvers ={
                 estatus:args.estatus
             };
             console.log(actualizacion)
-            await models.usuario.update(actualizacion, {where: {factura_id:args.factura_id}})
-            return models.usuario.findByPk(args.factura_id)
+            await models.factura.update(actualizacion, {where: {factura_id:args.factura_id}})
+            return models.factura.findByPk(args.factura_id)
         },
     }
 

@@ -4,11 +4,11 @@ import styles from '../styles/adminCondominios.module.css'
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import {useForm} from "react-hook-form";
 import {makeStyles} from "@material-ui/core/styles";
-import NavbarInicio from "../components/navbarInicio";
+import NavbarAdmin from "../components/navbarAdmin";
 import Image from "next/image";
 import {Spinner} from "react-bootstrap";
 
-const Perfil =()=> {
+const PerfilAdmin =()=> {
 
     const useStyles = makeStyles((theme) => ({
         paper: {
@@ -72,28 +72,6 @@ const Perfil =()=> {
 
     }
 
-    const inicial = async() =>{
-
-        const info = await getInitialProps(dato.usuario_id);
-
-        console.log(info.getApartamento.nombre)
-        console.log(info.getApartamento)
-
-        localStorage.setItem('nombreA', info.getApartamento.nombre);
-        localStorage.setItem('alicuota', info.getApartamento.alicuota);
-        localStorage.setItem('dimensiones', info.getApartamento.dimensiones);
-
-        if(info.getApartamento.is_alquilado === true){
-            localStorage.setItem('is_alquilado', "Sí");
-        }else{
-            localStorage.setItem('is_alquilado', "No");
-        }
-
-
-        setLoading(false);
-
-    }
-
       const handleChange = e =>{
           setData({
               ...dato,
@@ -131,35 +109,6 @@ const Perfil =()=> {
 
     };
 
-    async function getInitialProps() { //Función asincrona para consumir datos de la API
-
-        console.log(nombre)
-        const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
-            cache: new InMemoryCache()
-        });
-
-        // try{
-        const {data} = await client.query({ // Query de graphql
-            query: gql`
-                        query{
-                            getApartamento(usuario_id: ${usuario_id}){
-                                nombre
-                                alicuota
-                                is_alquilado
-                                dimensiones
-                                }
-                          }
-                        `,
-        });
-        console.log('////////////////////////')
-        console.log('data:', data)
-
-        return data;
-
-    };
-
-
 
     return (
         <div className={styles.toda}>
@@ -170,39 +119,9 @@ const Perfil =()=> {
                        alt="imagen"
                        layout="fill"
                 />
-                <NavbarInicio/>
+                <NavbarAdmin/>
             </div>
-
             <div className={styles.todo}>
-
-                <div className={styles.datos}>
-                    <label className={styles.labelI}
-                    content={inicial()}
-                    >
-                        <label className={styles.labelN}>
-                            Apartamento {localStorage.getItem("nombreA")}
-                        </label>
-
-                        <label className={styles.label}>
-                           <p>-----------------------------------------------------</p>
-                            <p className={styles.a}>Alicuota: {localStorage.getItem("alicuota")}</p>
-                        </label>
-
-                        <label className={styles.label}>
-                            <p>-----------------------------------------------------</p>
-                            <p className={styles.a}>Dimensiones: {localStorage.getItem("dimensiones")}</p>
-                        </label>
-
-                        <label className={styles.label}>
-                            <p>-----------------------------------------------------</p>
-                            <p className={styles.a}>Alquilado: {localStorage.getItem("is_alquilado")}</p>
-                        </label>
-
-
-                    </label>
-
-                </div>
-
                 <div className={styles.paper}>
 
                     <form
@@ -277,14 +196,12 @@ const Perfil =()=> {
                     </form>
 
                 </div>
+                </div>
             </div>
-
-
-        </div>
 
     )
 
 }
 
-export default Perfil;
+export default PerfilAdmin;
 
