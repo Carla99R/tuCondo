@@ -61,6 +61,7 @@ const Solicitudes =()=> {
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'Alquiler', headerName: 'Alquiler', width: 130 },
+        { field: 'Precio', headerName: 'Precio', width: 130 },
         { field: 'Estatus', headerName: 'Estatus', width: 130 },
 
     ];
@@ -68,20 +69,29 @@ const Solicitudes =()=> {
 
     const [alquiler, setAlquiler] = useState([])
     const [rows, setRows] = useState([])
-    const [estatus, setEstatus] = useState([])
 
 
 
     const tipoAlquileres = async() =>{
 
-        const response = await getAlquileres();
-        setAlquiler(response.getAlquileres)
-        console.log(alquiler)
+        const response = await getTipoAlquileres();
+
+        const est = await getEstatus();
+
+        let alqs = response.getTipoAlquileres.map(alq =>{
+            const res = est.getEstatus.find(r =>r.estatus_id === alq.estatus_id).descripcion
+            return {
+                ...alq,
+                estatus_desc: res
+            }
+        })
+        setAlquiler(response.getTipoAlquileres)
 
     }
+
     const alquileres =(alquileres)=>(
         alquileres.map((alquiler)=>(
-                rows({ id: alquiler.tipoAlquiler_id, Alquiler: alquiler.descripcion, Estatus: 'Disponible'})
+                setRows({ id: alquiler.tipoAlquiler_id, Alquiler: alquiler.descripcion, Estatus: alquiler.estatus_desc})
 
             )
         ))
@@ -97,7 +107,7 @@ const Solicitudes =()=> {
 
 
 
-    async function getAlquileres() { //Función asincrona para consumir datos de la API
+    async function getTipoAlquileres() { //Función asincrona para consumir datos de la API
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
@@ -110,9 +120,35 @@ const Solicitudes =()=> {
             query: gql`
                 query{
                     getTipoAlquileres{
+                        estatus_id
                         descripcion
                         tipoAlquiler_id
                         precio_usd
+                    }
+                }
+            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+
+    async function getEstatus() { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9700/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // try{
+        const {data} = await client.query({ // Query de graphql
+            query: gql`
+                query{
+                    getEstatus(identificador: "SERVICIO"){
+                        estatus_id
+                        descripcion
                     }
                 }
             `,

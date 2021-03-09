@@ -11,7 +11,11 @@ module.exports =(sequelize, DataTypes)=>{
         descripcion:{
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+        identificador:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
 
     },{timestamps: false});
 

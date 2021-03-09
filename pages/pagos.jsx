@@ -4,8 +4,11 @@ import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import Image from "next/image";
 import NavbarInicio from "../components/navbarInicio";
 import Table from "@material-ui/core/Table";
-import {object} from "prop-types";
-
+import {makeStyles} from "@material-ui/core";
+import {useForm} from "react-hook-form";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 
 
 const Pagos =()=> {
@@ -29,23 +32,42 @@ useEffect(()=>{
 
 },[]);
 
+    const useStyles = makeStyles((theme) => ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+            width: 900
+        },
+    }));
+
+
 
 const [dato, setData] = useState({
     correo:correo,
     apellido:apellido,
     nombre:nombre,
     cedula: cedula,
-    usuario_id: usuario_id
+    usuario_id: usuario_id,
+    factura_id:""
 
 });
+
+    const {handleSubmit} = useForm({
+        reValidateMode:'onSubmit'
+    });
 
 const [info, setInfo] = useState([])
 const [pagos, setPagos] = useState([])
 const [estatus, setEstatus] = useState()
 
 
-
-const factura = async() =>{
+    const factura = async() =>{
 
     let response = await getFacturas(dato.usuario_id);
     console.log(response)
@@ -56,11 +78,10 @@ const factura = async() =>{
 
     let facturas = response.getFacturas.map(fact =>{
        const res = estado.getEstatus.find(r =>r.estatus_id === fact.estatus_id).descripcion
-        let f_new = {
-           ...fact,
+        return {
+            ...fact,
             estatus_desc: res
         }
-        return f_new
     })
     setEstatus(estado.getEstatus)
     setInfo(facturas)
@@ -68,25 +89,28 @@ const factura = async() =>{
 
 }
 
-const pago = async(factura_id) =>{
-
-    const response = await getPagos(factura_id);
-    setPagos(response.getPagos)
-
-
-}
 
 const facturas =(info)=>(
 
     info.map((factura)=>(
+        <>
             <tbody>
-            <tr className={styles.border}>
+            <tr  key={factura.factura_id} >
                 <td className={styles.borde} key={factura.factura_id}>{factura.factura_id}</td>
                 <td className={styles.borde} key={factura.monto_total}> {factura.monto_total}</td>
                 <td className={styles.borde} key={factura.monto_total}> {factura.estatus_desc}</td>
+                <button
+                    className={styles.bot}
+                    onClick={(e) => submit(factura.factura_id, e)}
+                    type="submit"
+                >
+                    Ver Detalles
+                </button>
 
             </tr>
             </tbody>
+
+        </>
 
         )
 
@@ -132,7 +156,7 @@ async function getEstatus() { //Función asincrona para consumir datos de la API
     const {data} = await client.query({ // Query de graphql
         query: gql`
             query{
-                getEstatus{
+                getEstatus(identificador: "FACTURA"){
                     estatus_id
                     descripcion
                 }
@@ -158,6 +182,7 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
         query: gql`
                     query{
                         getPagos(factura_id: ${factura_id}){
+                            pago_id
                             currency
                             conversion
                             monto_usd
@@ -174,7 +199,7 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
 
 };
 
-async function getTipoPago(tipoPago_id) { //Función asincrona para consumir datos de la API
+async function getTipoPago() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
         uri: `http://localhost:9700/graphql`,
@@ -185,7 +210,8 @@ async function getTipoPago(tipoPago_id) { //Función asincrona para consumir dat
     const {data} = await client.query({ // Query de graphql
         query: gql`
             query{
-                getTipoPago(tipoPago_id: ${tipoPago_id}){
+                getTipoPago{
+                    tipoPago_id
                     descripcion
                 }
             }
@@ -197,9 +223,68 @@ async function getTipoPago(tipoPago_id) { //Función asincrona para consumir dat
     return data;
 
 };
-return (
 
-    <div className={styles.all}>
+    const submit = async(interdata) =>{
+
+        console.log(interdata)
+
+        const p = await getPagos(interdata);
+
+        const estado = await getTipoPago();
+
+        let pags = p.getPagos.map(pag =>{
+            const res = estado.getTipoPago.find(r =>r.tipoPago_id === pag.tipoPago_id).descripcion
+            return {
+                ...pag,
+                tipoPago_desc: res
+            }
+        })
+
+        setPagos(pags)
+        setId(interdata)
+        setOpen(true);
+
+
+    }
+
+    const pagar =(pagos)=>(
+
+        pagos.map((pago)=>(
+                <>
+                    <tbody>
+                    <tr className={styles.border}>
+                        <td className={styles.borde} key={pago.pago_id}>{pago.pago_id}</td>
+                        <td className={styles.borde} key={pago.tipoPago_id}> {pago.tipoPago_desc}</td>
+                        <td className={styles.borde} key={pago.currency}> {pago.currency}</td>
+                        <td className={styles.borde} key={pago.monto_usd}> {pago.monto_usd}</td>
+                        <td className={styles.borde} key={pago.monto_bss}> {pago.monto_bss}</td>
+
+                    </tr>
+                    </tbody>
+
+                </>
+
+            )
+
+        ))
+
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [id, setId] = useState([]);
+
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+    return (
+
+    <div className={styles.all} >
 
         <div className={styles.orden}>
             <Image className={styles.fondo}
@@ -210,7 +295,8 @@ return (
             <NavbarInicio/>
         </div>
 
-        <div className={styles.tabla}>
+        <div className={styles.tabla}
+        >
             <Table striped bordered hover >
                 <thead>
                 <tr className={styles.border}>
@@ -219,11 +305,42 @@ return (
                     <th className={styles.border}>Estatus</th>
                 </tr>
                 </thead>
-
                 {info && facturas(info)}
+                </Table>
+            <div className={styles.inicio}>
 
-            </Table>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                        <div className={classes.paper}>
+                            <h2 id="transition-modal-title">Pagos factura {id}</h2>
 
+                            <Table striped bordered hover >
+                                <thead>
+                                <tr className={styles.border}>
+                                    <th className={styles.border}>Pago ID</th>
+                                    <th className={styles.border}>Descripcion</th>
+                                    <th className={styles.border}>Moneda</th>
+                                    <th className={styles.border}>Monto ($)</th>
+                                    <th className={styles.border}>Monto (BsS)</th>
+                                </tr>
+                                </thead>
+                                {pagos && pagar(pagos)}
+                            </Table>
+                        </div>
+                    </Fade>
+                </Modal>
+            </div>
         </div>
     </div>
 

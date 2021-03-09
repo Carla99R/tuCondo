@@ -31,6 +31,7 @@
     "sequelize": "^5.15.1",
     "sequelize-cli": "^5.4.0",
     "sharp": "^0.26.3",
+    "slug": "^4.0.3",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@babel/preset-env": "^7.12.13",
     "@material-ui/data-grid": "^4.0.0-alpha.21",
     "apollo-boost": "^0.4.9",
+    "clsx": "^1.1.1",
     "formik": "^2.2.6",
     "nodemon": "^2.0.7",
     "prop-types": "^15.7.2",

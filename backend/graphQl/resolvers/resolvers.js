@@ -197,15 +197,15 @@ const resolvers ={
             }
         },
         async getEstatus(root, args, {models}) {
-            return models.estatus.findAll()
+            return models.estatus.findAll({
+                where:{
+                    identificador: args.identificador
+                }
+            })
         },
 
         async getTipoPago(root, args, {models}) {
-            return models.tipoPago.findOne({
-                where:{
-                    tipoPago_id: args.tipoPago_id
-                }
-            })
+            return models.tipoPago.findAll()
         },
 
         async getTipoAlquiler(root, args, {models}) {
