@@ -2,9 +2,9 @@
 
 import Sequelize from 'sequelize'
 
-const sequelize = new Sequelize('tucondo', 'root', 'Carlyta99!!',{
+const sequelize = new Sequelize('tucondo', 'root', 'c1a2g3p4c5d6',{
         host: '127.0.0.1',
-        port:'3307',
+        port:'3306',
         dialect: 'mysql'
 })
 
@@ -20,7 +20,10 @@ const models ={
     estatus: sequelize.import('./estatus'),
 
     alquiler: sequelize.import('./alquiler'),
-    tipoAlquiler: sequelize.import('./tipoAlquiler')
+    tipoAlquiler: sequelize.import('./tipoAlquiler'),
+    gasto: sequelize.import('./gasto'),
+    gastoEdificio: sequelize.import('./gastoEdificio'),
+    gastoApartamento: sequelize.import('./gastoApartamento')
 
 }
 

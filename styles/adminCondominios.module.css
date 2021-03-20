@@ -139,3 +139,25 @@
 .t{
     margin: 5%;
 }
+
+.gastos{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tablaGastos{
+    margin: 5%;
+}
+
+.agregar{
+    color: green;
+
+}
+
+.add{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 2%;
+}

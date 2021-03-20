@@ -1,3 +1,5 @@
+const { ArrowForwardTwoTone } = require("@material-ui/icons")
+
 const resolvers ={
 
     Query: {
@@ -105,7 +107,7 @@ const resolvers ={
 
         async getEdificios(root, args, {models}) {
             return models.edificio.findAll({
-                where:{
+                where:  {
                     condominio_id: args.condominio_id,
                     eliminado: false
                 }
@@ -140,7 +142,7 @@ const resolvers ={
 
         async getApartamentos(root, args, {models}) {
             return models.apartamento.findAll({
-                where: {
+                where:  {
                     edificio_id: args.edificio_id,
                     eliminado: false
                 }
@@ -191,7 +193,7 @@ const resolvers ={
         async getFacturas(root, args, {models}) {
             return models.factura.findAll({
                 where:{
-                    usuario_id: args.usuario_id
+                    apartamento_id: args.apartamento_id
                 }
             })
         },
@@ -201,7 +203,7 @@ const resolvers ={
                 return models.factura.findOne({
                     where: {
                         estatus_id: args.estatus_id,
-                        usuario_id: args.estatus_id
+                        apartamento_id: args.apartamento_id
                     }
                 })
             }
@@ -211,11 +213,60 @@ const resolvers ={
                 where:{
                     identificador: args.identificador
                 }
+        })},
+
+        async getTipoPago(root, args, {models}) {
+            return models.tipoPago.findOne({
+                where:{
+                    tipo_pago_id: args.tipo_pago_id
+                }
             })
         },
 
-        async getTipoPago(root, args, {models}) {
-            return models.tipoPago.findAll()
+        async getGastos(root, args, { models }) {
+            return models.gasto.findAll()
+        },
+
+        async getGastoEdificios(root, args, { models }) {
+            return models.gastoEdificio.findAll({
+                where: {
+                    eliminado: false
+                }
+            })
+        },
+
+        async getGastoApartamentos(root, args, { models }) {
+            return models.gastoApartamento.findAll({
+                where: {
+                    eliminado: false
+                }
+            })
+        },
+
+        async getGasto(root, args, { models }) {
+            return models.gasto.findAll({
+                where: {
+                    factura_id: args.factura_id
+                }
+            })
+        },
+
+        async getGastoEdificio(root, args, { models }) {
+            return models.gastoEdificio.findOne({
+                where: {
+                    edificio_id: args.edificio_id,
+                    eliminado: false
+                }
+            })
+        },
+
+        async getGastoApartamento(root, args, { models }) {
+            return models.gastoApartamento.findOne({
+                where: {
+                    apartamento_id: args.apartamento_id,
+                    eliminado: false
+                }
+            })
         },
 
         async getTipoAlquiler(root, args, {models}) {
@@ -264,17 +315,36 @@ const resolvers ={
             return await models.apartamento.create({nombre, alicuota, is_alquilado, dimensiones, usuario_id, edificio_id})
         },
 
-        async createPago(root, {tipoPago_id, factura_id, currency, conversion, monto_usd, monto_bss},{models}){
-            return await models.pago.create({tipoPago_id, factura_id, currency, conversion, monto_usd, monto_bss})
+        async createPago(root, {tipo_pago_id, factura_id, comprobante, monto},{models}){
+            return await models.pago.create({tipo_pago_id, factura_id, comprobante, monto})
         },
 
-        async createFactura(root, {usuario_id, monto_total},{models}){
-            return await models.factura.create({usuario_id, monto_total})
+        async createFactura(root, {apartamento_id, monto_total},{models}){
+            return await models.factura.create({apartamento_id, monto_total})
         },
 
         async createAlquiler(root, {usuario_id, tipoAlquiler_id},{models}){
             return await models.alquiler.create({usuario_id, tipoAlquiler_id})
         },
+
+        async createTipoPago(root, { descripcion, currency }, { models }) {
+            return await models.tipoPago.create({ descripcion, currency })
+        },
+
+        async createGasto(root, { descripcion, factura_id }, { models }) {
+            return await models.gasto.create({ descripcion, factura_id })
+        },
+
+        async createGastoEdificio(root, { gasto_id, edificio_id, monto_edificio }, { models }) {
+            return await models.gastoEdificio.create({ gasto_id, edificio_id, monto_edificio })
+        },
+        
+        async createGastoApartamento(root, { gasto_id, apartamento_id, monto_apartamento }, { models }) {
+            return await models.gastoApartamento.create({ gasto_id, apartamento_id, monto_apartamento })
+        },
+
+
+
 
         async deleteUsuario(root, args, {models}){
 
@@ -292,7 +362,7 @@ const resolvers ={
                 eliminado: true
             };
             console.log(eliminado)
-            await models.condominio.update(eliminado, {where: {condominio_id: args.condominio_id}})
+            await models.condominio.update(eliminado, {where: {condominio_id:args.condominio_id}})
             return models.condominio.findByPk(args.condominio_id)
         },
 
@@ -317,7 +387,6 @@ const resolvers ={
         },
 
         async deleteAlquiler(root, args, {models}){
-
             const eliminado = {
                 eliminado: true
             };
@@ -326,17 +395,42 @@ const resolvers ={
             return models.alquiler.findByPk(args.alquiler_id)
         },
 
-        async deletePago(root, args, {models}){
+        async deleteFactura(root, args, { models }) {     // TODO al seleccionar el factura puedo obtener el condominio_id
+
+            const eliminado = {
+                estatus_id: 7
+            };
+            console.log(eliminado)
+            await models.factura.update(eliminado, { where: { factura_id: args.factura_id } })
+            return models.factura.findByPk(args.factura_id)
+        },
+
+        async deleteGastoEdificio(root, args, { models }) {     // TODO al seleccionar el factura puedo obtener el condominio_id
+            
+            const eliminado = {
+                eliminado: true
+            };
+
+            await models.gastoEdificio.update(eliminado, { where: { gasto_id: args.gasto_id, edificio_id: args.edificio_id} })
+            return models.gastoEdificio.findOne({ where: { gasto_id: args.gasto_id, edificio_id: args.edificio_id }})
+       
+                   },
+
+        
+        async deleteGastoApartamento(root, args, { models }) {     // TODO al seleccionar el factura puedo obtener el condominio_id
 
             const eliminado = {
                 eliminado: true
             };
             console.log(eliminado)
-            await models.pago.update(eliminado, {where: {pago_id:args.pago_id}})
-            return models.pago.findByPk(args.pago_id)
+            await models.gastoApartamento.update(eliminado, { where: { gasto_id: args.gasto_id, apartamento_id: args.apartamento_id} })
+            return models.gastoApartamento.findOne({ where: { gasto_id: args.gasto_id, apartamento_id: args.apartamento_id } })
         },
 
-        async updateUsuario(root, args, {models}){
+
+
+
+        async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id
 
             const actualizacion = {
                 nombre:args.nombre,
@@ -354,7 +448,7 @@ const resolvers ={
                 nombre:args.nombre
             };
             console.log(actualizacion)
-            await models.condominio.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}})
+            await models.condominio.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}}) //TODO el condominio_id lo obtengo cuando selecciono el condominio a modificar y le doy a modificar, ahi se ejecuta el getCondominio
             return models.condominio.findByPk(args.condominio_id)
         },
 
@@ -365,7 +459,7 @@ const resolvers ={
                 num_pisos:args.num_pisos
             };
             console.log(actualizacion)
-            await models.edificio.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}})
+            await models.edificio.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}}) //TODO el edificio_id lo obtengo cuando selecciono el edificio a modificar y le doy a modificar, ahi se ejecuta el getEdificio
             return models.edificio.findByPk(args.edificio_id)
         },
 
@@ -378,7 +472,7 @@ const resolvers ={
                 dimensiones:args.dimensiones
             };
             console.log(actualizacion)
-            await models.apartamento.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}})
+            await models.apartamento.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}}) //TODO el apartamento_id lo obtengo cuando selecciono el apartamento a modificar y le doy a modificar, ahi se ejecuta el getApartamento
             return models.apartamento.findByPk(args.apartamento_id)
         },
 
