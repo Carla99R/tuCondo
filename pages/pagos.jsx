@@ -4,7 +4,7 @@ import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import Image from "next/image";
 import NavbarInicio from "../components/navbarInicio";
 import Table from "@material-ui/core/Table";
-import {makeStyles} from "@material-ui/core";
+import {makeStyles, TextField} from "@material-ui/core";
 import {useForm} from "react-hook-form";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -42,7 +42,9 @@ useEffect(()=>{
             backgroundColor: theme.palette.background.paper,
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
-            width: 900
+            width: 900,
+            maxHeight: '80vh',
+            overflowY: 'auto',
         },
     }));
 
@@ -54,11 +56,14 @@ const [dato, setData] = useState({
     nombre:nombre,
     cedula: cedula,
     usuario_id: usuario_id,
-    factura_id:""
+    factura_id:"",
+    monto_total: "",
+    referencia:"",
+    tipo_pago_id:""
 
 });
 
-    const {handleSubmit} = useForm({
+    const {handleSubmit, errors, register} = useForm({
         reValidateMode:'onSubmit'
     });
 
@@ -118,7 +123,7 @@ const facturas =(info)=>(
                 <td className={styles.borde} key={factura.factura_id}>{factura.factura_id}</td>
                 <td className={styles.borde} key={factura.apartamento_id}>{factura.apartamento_id}</td>
                 <td className={styles.borde} key={factura.monto_total}> {factura.monto_total}</td>
-                <td className={styles.borde} key={factura.monto_total}> {factura.estatus_desc}</td>
+                <td className={styles.borde} key={factura.estatus_desc}> {factura.estatus_desc}</td>
                 <button
                     className={styles.bot}
                     onClick={(e) => submit(factura.factura_id, factura.apartamento_id, e)}
@@ -128,7 +133,7 @@ const facturas =(info)=>(
                 </button>
                 <button
                     className={styles.bot}
-                    onClick={(e) => pagarGastos(factura.factura_id, e)}
+                    onClick={(e) => pagarGastos(factura.factura_id, factura.monto_total, e)}
                     type="submit"
                 >
                     Proceder con el Pago
@@ -154,7 +159,7 @@ const facturas =(info)=>(
                         <td className={styles.borde} key={tipo.currency}> {tipo.currency}</td>
                         <button
                             className={styles.bot}
-                            onClick={(e) => pago(e)}
+                            onClick={(e) => pago(tipo.tipo_pago_id, e)}
                             type="submit"
                         >
                             Pagar
@@ -253,7 +258,7 @@ async function getEstatus() { //Función asincrona para consumir datos de la API
 
 };
 
-async function getPagos(factura_id) { //Función asincrona para consumir datos de la API
+async function createPago() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
         uri: `http://localhost:9900/graphql`,
@@ -261,10 +266,10 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
     });
 
     // try{
-    const {data} = await client.query({ // Query de graphql
-        query: gql`
-                    query{
-                        getPagos(factura_id: ${factura_id}){
+    const {data} = await client.mutate({ // Query de graphql
+        mutation: gql`
+                    mutation{
+                        createPago(tipo_pago_id: ${dato.tipo_pago_id}, factura_id: ${fID} , monto: ${dato.monto_total}, comprobante: ${dato.referencia}){
                             pago_id
                             monto
                             comprobante
@@ -428,23 +433,45 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
     }
 
 
-    const pagarGastos = async(interdata) =>{
+    const pagarGastos = async(factura_id, monto_total) =>{
+
+        setData({
+            ...dato,
+            monto_total : monto_total
+
+        })
 
         const p = await getTipoPagos();
         settipoPago(p.getTipoPagos)
         console.log(tipoPago)
         setOpenTipoP(true);
-        setfID(interdata)
+        setfID(factura_id)
     }
 
 
-    const pago = async() =>{
+    const pago = async(interdata) =>{
+
+        setData({
+            ...dato,
+            tipo_pago_id : interdata
+
+        })
+        setOpenP(true)
+    }
+
+
+    const pa = async() =>{
 
 
         const est = await getEstatus();
         const res = est.getEstatus.find(r =>r.descripcion === "PAGADO").estatus_id
 
         const p = await updateFactura(fID, res);
+
+        const pag = await createPago();
+
+        setOpenP(false)
+        setOpenTipoP(false)
     }
 
     const g =(gastos)=>(
@@ -472,7 +499,7 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
     const [open, setOpen] = React.useState(false);
     const [openA, setOpenA] = React.useState(false);
     const [openTipoP, setOpenTipoP] = React.useState(false);
-    const [id, setId] = useState([]);
+    const [openP, setOpenP] = React.useState(false);
 
 
     const handleOpen = () => {
@@ -484,8 +511,16 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
         setOpen(false);
         setOpenA(false);
         setOpenTipoP(false);
+        setOpenP(false)
     };
 
+    const handleChange = e =>{
+        setData({
+            ...dato,
+            [e.target.name] : e.target.value
+        })
+
+    }
 
     return (
 
@@ -513,6 +548,7 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
                 </thead>
                 {apt && apartamentos(apt)}
             </Table>
+        </div>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -524,13 +560,13 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
                 BackdropProps={{
                     timeout: 500,
                 }}
-            >
-                <Fade in={openA}>
+                >
+                <Fade in={openA} >
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">Facturas</h2>
 
-                        <Table striped bordered hover >
-                            <thead>
+                        <Table striped bordered hover>
+                            <thead >
                             <tr className={styles.border}>
                                 <th className={styles.border}>Factura ID</th>
                                 <th className={styles.border}>Apartamento ID</th>
@@ -543,8 +579,6 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
                     </div>
                 </Fade>
             </Modal>
-
-            <div className={styles.inicio}>
 
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -606,8 +640,52 @@ async function getTipoPagos() { //Función asincrona para consumir datos de la A
                         </div>
                     </Fade>
                 </Modal>
-            </div>
-        </div>
+
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={openP}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={openP}>
+                        <div className={classes.paper}>
+                            <h2 id="transition-modal-title">Referencia</h2>
+
+                            <div>
+                                <form
+                                    onSubmit={handleSubmit(pa)}
+                                    className={`${classes.root} ${styles.form}`}
+                                >
+                                    <TextField
+                                        label="Referencia:"
+                                        className={"col s12"}
+                                        name="referencia"
+                                        inputRef={register({
+                                            required: {value: true, message: "Referencia obligatoria"}
+                                        })}
+                                        onChange={handleChange}
+                                    />
+                                    <div style={{display:"block", color:"red", visibility:errors?.referencia ? "visible" : "hidden"}}>{`${errors?.referencia && errors?.referencia?.message} `}</div>
+
+                                    <div className={styles.inicio}>
+                                        <button
+                                            className={styles.boton}
+                                        >
+                                            Aceptar
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </Fade>
+                </Modal>
     </div>
 
 

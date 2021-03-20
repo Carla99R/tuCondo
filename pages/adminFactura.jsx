@@ -43,7 +43,9 @@ const AdminFactura = () => {
 			backgroundColor: theme.palette.background.paper,
 			boxShadow: theme.shadows[5],
 			padding: theme.spacing(2, 4, 3),
-			width: 900
+			width: 900,
+			maxHeight: '80vh',
+			overflowY: 'auto',
 		},
 	}));
 

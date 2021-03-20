@@ -5,6 +5,11 @@ import {useForm} from "react-hook-form";
 import NavbarInicio from "../components/navbarInicio";
 import Image from "next/image";
 import Table from "@material-ui/core/Table";
+import {makeStyles, TextField} from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Modal from "@material-ui/core/Modal";
+
 
 const Solicitudes =()=> {
 
@@ -13,6 +18,8 @@ const Solicitudes =()=> {
     const [ cedula, setCedula ] = useState(localStorage.getItem('cedula'));
     const [ correo, setCorreo ] = useState(localStorage.getItem('correo'));
     const [ usuario_id, setUsuario_id ] = useState(localStorage.getItem('usuario_id'));
+
+
 
 
 
@@ -34,66 +41,96 @@ const Solicitudes =()=> {
         apellido:apellido,
         nombre:nombre,
         cedula: cedula,
-        usuario_id: usuario_id
+        usuario_id: usuario_id,
+        apartamento:"",
+        apartamento_id: "",
+        tipoAlquiler_id:"",
+        descripcion:"",
+        gasto_id:"",
+
 
     });
 
 
-    const {handleSubmit} = useForm({
+    const {handleSubmit, errors, register} = useForm({
         reValidateMode:'onSubmit'
     });
 
-    const submit = async(interdata, precio) =>{
-        //TODO ACA ME LANZO EL QUERY DE UPDATE TIPOALQUILER Y EL CREATE ALQUILER
+    const submit = async(interdata, descripcion) =>{
 
-        console.log(interdata)
-        console.log(precio)
+        setOpen(true)
 
+        setData({
+            ...dato,
+            tipoAlquiler_id : interdata,
+            descripcion : descripcion
+
+        })
+
+    }
+
+    const onSubmit = async() =>{
+
+        console.log(dato.tipoAlquiler_id)
+        console.log(dato.descripcion)
+        console.log(dato.apartamento)
+
+
+        const apt = await getApartamento();
         const est = await getEstatus();
         const res = est.getEstatus.find(r =>r.descripcion === "ALQUILADO").estatus_id
 
-        const p = await updateTipoAlquileres(interdata, res);
-        const c = await createAlquiler(interdata, dato.usuario_id);
+        console.log(apt.getApartamento)
 
-        const facturas = await getFacturas(dato.usuario_id);
+        const p = await updateTipoAlquileres(dato.tipoAlquiler_id, res);
+        const c = await createAlquiler(dato.tipoAlquiler_id, dato.usuario_id);
 
-        const monto_bss = precio * 1900000
+        const monto_bs = p.updateTipoAlquiler.precio_usd * 1900000
 
-        // let facts = facturas.getFacturas.map(alq =>{
-        //     const res = est.getEstatus.find(r =>r.estatus_id === alq.estatus_id).descripcion
-        //     return {
-        //         ...alq,
-        //         estatus_desc: res
-        //     }
-        // })
+        const fact = await createFactura(apt.getApartamento.apartamento_id, monto_bs);
+        console.log(fact.createFactura)
 
-        const factura = facturas.getFacturas.find(r =>r.estatus_id === 2).factura_id
-        console.log(factura)
+        const gasto = await createGasto( fact.createFactura.factura_id);
 
-        if(factura=== undefined){
-            const monto_bs = p.updateTipoAlquiler.precio_usd * 1900000
-
-            const fact = await createFactura(dato.usuario_id, p.updateTipoAlquiler.precio_usd);
-            const pago = await createPago(fact.createFactura.factura_id, p.updateTipoAlquiler.precio_usd, monto_bs);
-
-        }else{
-            // const precio = facturas.getPagos.find(r =>r.factura_id === factura).monto_bss
-            // console.log(precio)
-            const pago = await createPago(factura, precio, monto_bss);
-            console.log(pago)
-        }
+        console.log(gasto.createGasto)
+        console.log(gasto.createGasto.gasto_id)
+        console.log(apt.getApartamento.apartamento_id)
 
 
-        //setAlquilar(p.updateTipoAlquiler)
-        //setCrear(c.createAlquiler)
+        const pago = await createGastoApartamento(gasto.createGasto.gasto_id, apt.getApartamento.apartamento_id, monto_bs);
+
+        setData({
+            ...dato,
+            gasto_id : pago.createGastoApartamento.gasto_id,
+            apartamento_id: apt.getApartamento.apartamento_id
+        })
+
+        console.log(pago.createGastoApartamento)
+        setOpen(false)
 
     }
 
 
+    const useStyles = makeStyles((theme) => ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+            width: 900,
+            maxHeight: '80vh',
+            overflowY: 'auto',
+        },
+    }));
+
     const [alquiler, setAlquiler] = useState([])
-    const [pagoNew, setPagoNew] = useState([])
     const [alquilo, setAlquilado] = useState([])
-    const [factura, setFactura] = useState([])
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
 
 
 
@@ -144,11 +181,10 @@ const Solicitudes =()=> {
                         <td className={styles.borde} key={alquiler.precio_usd}> {alquiler.precio_usd}</td>
                         <td className={styles.borde} key={alquiler.estatus_id}> {alquiler.estatus_desc}</td>
 
-
                         <div style={alquiler.estatus_desc === "ALQUILADO" ? {"visible": "hidden"}: {"visible": ""}}>
                             <button
                                 className={styles.bot}
-                                onClick={(e) => submit(alquiler.tipoAlquiler_id, alquiler.precio_usd, e)}
+                                onClick={(e) => submit(alquiler.tipoAlquiler_id, alquiler.descripcion, e)}
                                 type="submit"
                             >
                                 Añadir
@@ -163,6 +199,14 @@ const Solicitudes =()=> {
             )
 
         ))
+
+    const handleChange = e =>{
+        setData({
+            ...dato,
+            [e.target.name] : e.target.value
+        })
+
+    }
 
     const alquilado =(alquilo)=>(
 
@@ -203,10 +247,6 @@ const Solicitudes =()=> {
 
         const p = await deleteAlquiler(id);
 
-        // const est = await getEstatus();
-        // const res = est.getEstatus.find(r =>r.descripcion === "DISPONIBLE").estatus_id
-
-
     }
 
 
@@ -237,6 +277,31 @@ const Solicitudes =()=> {
         return data;
 
     };
+
+    async function getApartamento() { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9900/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // try{
+        const {data} = await client.query({ // Query de graphql
+            query: gql`
+                query{
+                    getApartamento(nombre: "${dato.apartamento}", usuario_id: ${localStorage.getItem('usuario_id')}){
+                        apartamento_id
+                    }
+                }
+            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+
 
     async function getEstatus() { //Función asincrona para consumir datos de la API
 
@@ -366,20 +431,19 @@ const Solicitudes =()=> {
 
     };
 
-    async function getFacturas() { //Función asincrona para consumir datos de la API
+    async function deleteFactura(factura_id) { //Función asincrona para consumir datos de la API
 
+        console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
             uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
         // try{
-        const {data} = await client.query({ // Mutation de graphql
-            query: gql`
-                query{
-                    getFacturas(usuario_id: ${localStorage.getItem("usuario_id")}){
-                        estatus_id
-                        monto_total
+        const {data} = await client.mutate({ // Query de graphql
+            mutation: gql`
+                mutation {
+                    deleteFactura(factura_id: ${factura_id}){
                         factura_id
                     }
                 }
@@ -392,9 +456,10 @@ const Solicitudes =()=> {
 
     };
 
-    async function createPago(factura_id, monto_usd, monto_bss) { //Función asincrona para consumir datos de la API
 
-        console.log(nombre)
+
+    async function createGasto(factura_id) { //Función asincrona para consumir datos de la API
+
         const client = new ApolloClient({ // Cliente de Apolo
             uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
@@ -404,9 +469,9 @@ const Solicitudes =()=> {
         const {data} = await client.mutate({ // Query de graphql
             mutation: gql`
                 mutation {
-                    createPago( tipoPago_id: 3, factura_id: ${factura_id}, currency: "USD", conversion: "1900000.00", monto_usd: "${monto_usd}", monto_bss: "${monto_bss}"){
-                        pago_id
-                        tipoPago_id
+                    createGasto(descripcion: "${dato.descripcion}", factura_id: ${factura_id}){
+                        gasto_id
+                        descripcion
                     }
                 }
             `,
@@ -418,7 +483,32 @@ const Solicitudes =()=> {
 
     };
 
-    async function createFactura(usuario_id, monto) { //Función asincrona para consumir datos de la API
+    async function createGastoApartamento(gasto_id, apartamento_id, monto_apartamento) { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9900/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        const { data } = await client.mutate({ // Query de graphql
+            mutation: gql`
+                mutation{
+                    createGastoApartamento(gasto_id: ${gasto_id}, apartamento_id: ${apartamento_id}, monto_apartamento: ${monto_apartamento}){
+                        gasto_id
+                        apartamento_id
+                        monto_apartamento
+                    }
+                }
+            `,
+        });
+
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+    async function createFactura(apartamento_id, monto) { //Función asincrona para consumir datos de la API
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
@@ -430,7 +520,7 @@ const Solicitudes =()=> {
         const {data} = await client.mutate({ // Query de graphql
             mutation: gql`
                 mutation {
-                    createFactura(usuario_id: ${usuario_id}, monto_total: "${monto}"){
+                    createFactura(apartamento_id: ${apartamento_id}, monto_total: ${monto}){
                         factura_id
                     }
                 }
@@ -443,29 +533,8 @@ const Solicitudes =()=> {
 
     };
 
-    async function deletePago(pago_id) { //Función asincrona para consumir datos de la API
-
-        console.log(nombre)
-        const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
-            cache: new InMemoryCache()
-        });
-
-        // try{
-        const {data} = await client.mutate({ // Query de graphql
-            mutation: gql`
-                mutation {
-                    deletePago(pago_id: ${pago_id}){
-                        pago_id
-                    }
-                }
-            `,
-        });
-        console.log('////////////////////////')
-        console.log('data:', data)
-
-        return data;
-
+    const handleClose = () => {
+        setOpen(false);
     };
 
 
@@ -509,6 +578,51 @@ const Solicitudes =()=> {
                         {alquilo && alquilado(alquilo)}
                     </Table>
                 </div>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                        <div className={classes.paper}>
+                            <h2 id="transition-modal-title">Ingrese apartamento</h2>
+
+                            <div>
+                                <form
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    className={`${classes.root} ${styles.form}`}
+                                >
+                                    <TextField
+                                        label="Apartamento:"
+                                        className={"col s12"}
+                                        name="apartamento"
+                                        inputRef={register({
+                                            required: {value: true, message: "Apartamento obligatorio"}
+                                        })}
+                                        onChange={handleChange}
+                                    />
+                                    <div style={{display:"block", color:"red", visibility:errors?.apartamento ? "visible" : "hidden"}}>{`${errors?.apartamento && errors?.apartamento?.message} `}</div>
+
+                                    <div className={styles.inicio}>
+                                        <button
+                                            className={styles.boton}
+                                        >
+                                            Aceptar
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </Fade>
+                </Modal>
             </div>
         </div>
 

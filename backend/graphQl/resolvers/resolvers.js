@@ -169,7 +169,7 @@ const resolvers ={
             } else if (args.nombre && !args.edificio_id) {
                 return models.apartamento.findOne({
                     where: {
-                        name: args.nombre,
+                        nombre: args.nombre,
                         eliminado: false
                     }
                 })
@@ -177,7 +177,7 @@ const resolvers ={
             } else if (args.nombre && args.usuario_id) {
                 return models.apartamento.findOne({
                     where: {
-                        edificio_id: args.edificio_id,
+                        usuario_id: args.usuario_id,
                         nombre: args.nombre,
                         eliminado: false
                     }
@@ -191,6 +191,7 @@ const resolvers ={
                     }
                 })
             }
+
         },
         async getPagos(root, args, {models}) {
             if(args.factura_id){

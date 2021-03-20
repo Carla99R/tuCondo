@@ -33,6 +33,8 @@ const P =()=> {
     },[]);
 
 
+
+
     const [dato, setData] = useState({
         correo:correo,
         apellido:apellido,
