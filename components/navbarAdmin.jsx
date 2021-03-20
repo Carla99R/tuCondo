@@ -20,6 +20,9 @@ const NavBarAdmin =() =>{
                 <Link href="/adminCondominio" scroll={true}>
                     <a id={styles.inicio}>Inicio</a>
                 </Link>
+                <Link href="/adminFactura" scroll={true}>
+                    <a id={styles.inicio}>Facturas</a>
+                </Link>
                 <Link href="/perfilAdmin" scroll={true}>
                     <a id={styles.nosotros}>Perfil</a>
                 </Link>

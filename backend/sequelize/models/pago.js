@@ -14,23 +14,15 @@ module.exports =(sequelize, DataTypes)=>{
             foreignKey: true,
             references: models.factura
         },
-        currency:{
+        comprobante:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        conversion:{
-            type: DataTypes.STRING,
+        monto:{
+            type: DataTypes.FLOAT,
             allowNull: false
         },
-        monto_usd:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        monto_bss:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        tipoPago_id:{
+        tipo_pago_id:{
             type: DataTypes.INTEGER,
             allowNull: false,
             foreignKey: true,

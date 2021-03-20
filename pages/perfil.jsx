@@ -106,7 +106,7 @@ const Perfil =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -135,7 +135,7 @@ const Perfil =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 

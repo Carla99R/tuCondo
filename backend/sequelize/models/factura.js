@@ -8,19 +8,19 @@ module.exports =(sequelize, DataTypes)=>{
             autoIncrement: true,
             primaryKey: true
         },
-        usuario_id:{
+        apartamento_id:{
             type: DataTypes.INTEGER,
             allowNull: false,
             foreignKey: true,
-            references: models.usuario
+            references: models.apartamento
         },
         monto_total:{
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false
         },
         estatus_id:{
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             foreignKey: true,
             references: models.estatus
         }

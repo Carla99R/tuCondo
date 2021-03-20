@@ -93,7 +93,7 @@ const Pagos =()=> {
     async function getFacturas() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -119,7 +119,7 @@ const Pagos =()=> {
     async function getEstatus() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -144,7 +144,7 @@ const Pagos =()=> {
     async function getPagos(factura_id) { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -157,7 +157,7 @@ const Pagos =()=> {
                                 conversion
                                 monto_usd
                                 monto_bss
-                                tipoPago_id
+                                tipo_pago_id
                                 }
                           }
                         `,
@@ -172,7 +172,7 @@ const Pagos =()=> {
     async function getTipoPago(factura_id) { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
