@@ -141,12 +141,21 @@ const resolvers ={
         },
 
         async getApartamentos(root, args, {models}) {
-            return models.apartamento.findAll({
-                where:  {
-                    edificio_id: args.edificio_id,
-                    eliminado: false
-                }
-            })
+            if(args.edificio_id && !args.usuario_id){
+                return models.apartamento.findAll({
+                    where:  {
+                        edificio_id: args.edificio_id,
+                        eliminado: false
+                    }
+                })
+            }else if(!args.edificio_id && args.usuario_id){
+                return models.apartamento.findAll({
+                    where:  {
+                        usuario_id: args.usuario_id,
+                        eliminado: false
+                    }
+                })
+            }
         },
 
         async getApartamento(root, args, {models}) {
@@ -184,12 +193,17 @@ const resolvers ={
             }
         },
         async getPagos(root, args, {models}) {
-            return models.pago.findAll({
-                where:{
-                    factura_id: args.factura_id
-                }
-            })
+            if(args.factura_id){
+                return models.pago.findAll({
+                    where:{
+                        factura_id: args.factura_id
+                    }
+                })
+            }else{
+                return models.pago.findAll()
+            }
         },
+
         async getFacturas(root, args, {models}) {
             return models.factura.findAll({
                 where:{
@@ -221,6 +235,10 @@ const resolvers ={
                     tipo_pago_id: args.tipo_pago_id
                 }
             })
+        },
+
+        async getTipoPagos(root, args, {models}) {
+            return models.tipoPago.findAll()
         },
 
         async getGastos(root, args, { models }) {
@@ -261,7 +279,7 @@ const resolvers ={
         },
 
         async getGastoApartamento(root, args, { models }) {
-            return models.gastoApartamento.findOne({
+            return models.gastoApartamento.findAll({
                 where: {
                     apartamento_id: args.apartamento_id,
                     eliminado: false

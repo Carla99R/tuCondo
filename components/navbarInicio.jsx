@@ -27,10 +27,13 @@ const NavBarInicio =() =>{
                 {/*    <a id={styles.info}>Noticias</a>*/}
                 {/*</Link>*/}
                 <Link href="/pagos" scroll={true}>
-                    <a id={styles.info}>Pagos</a>
+                    <a id={styles.info}>Facturas</a>
                 </Link>
                 <Link href="/solicitudes" scroll={true}>
                     <a id={styles.info}>Solicitudes</a>
+                </Link>
+                <Link href="/p" scroll={true}>
+                    <a id={styles.info}>Pagos Realizados</a>
                 </Link>
             </Nav>
         </Navbar>

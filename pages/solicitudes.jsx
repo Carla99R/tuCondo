@@ -214,7 +214,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -241,7 +241,7 @@ const Solicitudes =()=> {
     async function getEstatus() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -267,7 +267,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -293,7 +293,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -319,7 +319,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -345,7 +345,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -369,7 +369,7 @@ const Solicitudes =()=> {
     async function getFacturas() { //Función asincrona para consumir datos de la API
 
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -396,7 +396,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -422,7 +422,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -447,7 +447,7 @@ const Solicitudes =()=> {
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 

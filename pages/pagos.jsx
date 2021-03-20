@@ -27,7 +27,7 @@ useEffect(()=>{
     setCedula(localStorage.getItem('cedula'))
     setCorreo(localStorage.getItem('correo'))
     setUsuario_id(localStorage.getItem('usuario_id'))
-    factura()
+    apartamento()
 
 
 },[]);
@@ -64,31 +64,50 @@ const [dato, setData] = useState({
 
 const [info, setInfo] = useState([])
 const [pagos, setPagos] = useState([])
+const [gastos, setGastos] = useState([])
 const [estatus, setEstatus] = useState()
+const [apt, setApt] = useState()
+const [tipoPago, settipoPago] = useState()
+const [fID, setfID] = useState()
 
 
-    const factura = async() =>{
-
-    let response = await getFacturas(dato.usuario_id);
-    console.log(response)
-
-    const estado = await getEstatus();
-    console.log(estado)
 
 
-    let facturas = response.getFacturas.map(fact =>{
-       const res = estado.getEstatus.find(r =>r.estatus_id === fact.estatus_id).descripcion
-        return {
-            ...fact,
-            estatus_desc: res
-        }
-    })
-    setEstatus(estado.getEstatus)
-    setInfo(facturas)
 
+    const apartamento = async() =>{
 
-}
+        const apartamentos = await getApartamentos();
+        setApt(apartamentos.getApartamentos);
 
+    }
+
+    const apartamentos =(info)=>(
+
+        info.map((apartamento)=>(
+                <>
+                    <tbody>
+                    <tr  key={apartamento.factura_id} >
+                        <td className={styles.borde} key={apartamento.apartamento_id}>{apartamento.apartamento_id}</td>
+                        <td className={styles.borde} key={apartamento.nombre}> {apartamento.nombre}</td>
+                        <td className={styles.borde} key={apartamento.alicuota}> {apartamento.alicuota}</td>
+                        <td className={styles.borde} key={apartamento.dimensiones}> {apartamento.dimensiones}</td>
+
+                        <button
+                            className={styles.bot}
+                            onClick={(e) => submitApartamento(apartamento.apartamento_id, e)}
+                            type="submit"
+                        >
+                            Ver Facturas
+                        </button>
+
+                    </tr>
+                    </tbody>
+
+                </>
+
+            )
+
+        ))
 
 const facturas =(info)=>(
 
@@ -97,21 +116,22 @@ const facturas =(info)=>(
             <tbody>
             <tr  key={factura.factura_id} >
                 <td className={styles.borde} key={factura.factura_id}>{factura.factura_id}</td>
+                <td className={styles.borde} key={factura.apartamento_id}>{factura.apartamento_id}</td>
                 <td className={styles.borde} key={factura.monto_total}> {factura.monto_total}</td>
                 <td className={styles.borde} key={factura.monto_total}> {factura.estatus_desc}</td>
                 <button
                     className={styles.bot}
-                    onClick={(e) => submit(factura.factura_id, e)}
+                    onClick={(e) => submit(factura.factura_id, factura.apartamento_id, e)}
                     type="submit"
                 >
                     Ver Detalles
                 </button>
                 <button
                     className={styles.bot}
-                    onClick={(e) => pago(factura.factura_id, e)}
+                    onClick={(e) => pagarGastos(factura.factura_id, e)}
                     type="submit"
                 >
-                    Pagar
+                    Proceder con el Pago
                 </button>
 
             </tr>
@@ -123,12 +143,67 @@ const facturas =(info)=>(
 
     ))
 
+    const t =(tipos)=>(
+
+        tipos.map((tipo)=>(
+                <>
+                    <tbody>
+                    <tr className={styles.border}>
+                        <td className={styles.borde} key={tipo.tipo_pago_id}>{tipo.tipo_pago_id}</td>
+                        <td className={styles.borde} key={tipo.descripcion}> {tipo.descripcion}</td>
+                        <td className={styles.borde} key={tipo.currency}> {tipo.currency}</td>
+                        <button
+                            className={styles.bot}
+                            onClick={(e) => pago(e)}
+                            type="submit"
+                        >
+                            Pagar
+                        </button>
+
+                    </tr>
+                    </tbody>
+
+                </>
+
+            )
+
+        ))
 
 
-async function getFacturas() { //Función asincrona para consumir datos de la API
+    async function getApartamentos() { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9900/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        const {data} = await client.query({ // Query de graphql
+            query: gql`
+                query{
+                    getApartamentos(usuario_id: ${localStorage.getItem("usuario_id")}){
+                        is_alquilado
+                        alicuota
+                        nombre
+                        dimensiones
+                        apartamento_id
+                    }
+                }
+            `,
+        });
+
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+
+
+
+async function getFacturas(apartamento_id) { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9800/graphql`,
+        uri: `http://localhost:9900/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -136,10 +211,11 @@ async function getFacturas() { //Función asincrona para consumir datos de la AP
     const {data} = await client.query({ // Mutation de graphql
         query: gql`
             query{
-                getFacturas(usuario_id: ${localStorage.getItem("usuario_id")}){
+                getFacturas(apartamento_id: ${apartamento_id}){
+                    factura_id
                     estatus_id
                     monto_total
-                    factura_id
+                    apartamento_id
                 }
             }
         `,
@@ -155,7 +231,7 @@ async function getFacturas() { //Función asincrona para consumir datos de la AP
 async function getEstatus() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9800/graphql`,
+        uri: `http://localhost:9900/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -180,7 +256,7 @@ async function getEstatus() { //Función asincrona para consumir datos de la API
 async function getPagos(factura_id) { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9800/graphql`,
+        uri: `http://localhost:9900/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -190,11 +266,9 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
                     query{
                         getPagos(factura_id: ${factura_id}){
                             pago_id
-                            currency
-                            conversion
-                            monto_usd
-                            monto_bss
-                            tipoPago_id
+                            monto
+                            comprobante
+                            tipo_pago_id
                             }
                       }
                     `,
@@ -206,10 +280,64 @@ async function getPagos(factura_id) { //Función asincrona para consumir datos d
 
 };
 
-async function getTipoPago() { //Función asincrona para consumir datos de la API
+
+    async function getGastoApartamento(apartamento_id) { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9900/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // try{
+        const { data } = await client.query({ // Query de graphql
+            query: gql`
+                query{
+                    getGastoApartamento(apartamento_id: ${apartamento_id}){
+                        gasto_id
+                        apartamento_id
+                        monto_apartamento
+                    }
+                }
+            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+
+    async function getGasto(factura_id) { //Función asincrona para consumir datos de la API
+
+        const client = new ApolloClient({ // Cliente de Apolo
+            uri: `http://localhost:9900/graphql`,
+            cache: new InMemoryCache()
+        });
+
+        // try{
+        const { data } = await client.query({ // Query de graphql
+            query: gql`
+                query{
+                    getGasto(factura_id: ${factura_id}){
+                        gasto_id
+                        descripcion
+                    }
+                }
+            `,
+        });
+        console.log('////////////////////////')
+        console.log('data:', data)
+
+        return data;
+
+    };
+
+
+
+async function getTipoPagos() { //Función asincrona para consumir datos de la API
 
     const client = new ApolloClient({ // Cliente de Apolo
-        uri: `http://localhost:9800/graphql`,
+        uri: `http://localhost:9900/graphql`,
         cache: new InMemoryCache()
     });
 
@@ -217,9 +345,10 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
     const {data} = await client.query({ // Query de graphql
         query: gql`
             query{
-                getTipoPago{
-                    tipoPago_id
+                getTipoPagos{
+                    tipo_pago_id
                     descripcion
+                    currency
                 }
             }
         `,
@@ -235,7 +364,7 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
 
         console.log(nombre)
         const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9800/graphql`,
+            uri: `http://localhost:9900/graphql`,
             cache: new InMemoryCache()
         });
 
@@ -256,50 +385,78 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
 
     };
 
-    const submit = async(interdata) =>{
+    const submit = async(factura_id, apartamento_id) =>{
 
-        console.log(interdata)
 
-        const p = await getPagos(interdata);
+        const estado = await getGasto(factura_id);
 
-        const estado = await getTipoPago();
+        const gasto = await getGastoApartamento(apartamento_id);
 
-        let pags = p.getPagos.map(pag =>{
-            const res = estado.getTipoPago.find(r =>r.tipoPago_id === pag.tipoPago_id).descripcion
+        let pags = gasto.getGastoApartamento.map(pag =>{
+            const res = estado.getGasto.find(r =>r.gasto_id === pag.gasto_id).descripcion
             return {
                 ...pag,
-                tipoPago_desc: res
+                gasto_desc: res
             }
         })
 
-        setPagos(pags)
-        setId(interdata)
+        setGastos(pags)
         setOpen(true);
-
 
     }
 
-    const pago = async(interdata) =>{
+    const submitApartamento = async(interdata) =>{
 
-        console.log(interdata)
+        let response = await getFacturas(interdata);
+        console.log(response)
+
+        const estado = await getEstatus();
+        console.log(estado)
+
+
+        let facturas = response.getFacturas.map(fact =>{
+            const res = estado.getEstatus.find(r =>r.estatus_id === fact.estatus_id).descripcion
+            return {
+                ...fact,
+                estatus_desc: res
+            }
+        })
+        setEstatus(estado.getEstatus)
+        setInfo(facturas)
+        setOpenA(true);
+
+    }
+
+
+    const pagarGastos = async(interdata) =>{
+
+        const p = await getTipoPagos();
+        settipoPago(p.getTipoPagos)
+        console.log(tipoPago)
+        setOpenTipoP(true);
+        setfID(interdata)
+    }
+
+
+    const pago = async() =>{
+
 
         const est = await getEstatus();
         const res = est.getEstatus.find(r =>r.descripcion === "PAGADO").estatus_id
 
-        const p = await updateFactura(interdata, res);
+        const p = await updateFactura(fID, res);
     }
 
-    const pagar =(pagos)=>(
+    const g =(gastos)=>(
 
-        pagos.map((pago)=>(
+        gastos.map((gasto)=>(
                 <>
                     <tbody>
                     <tr className={styles.border}>
-                        <td className={styles.borde} key={pago.pago_id}>{pago.pago_id}</td>
-                        <td className={styles.borde} key={pago.tipoPago_id}> {pago.tipoPago_desc}</td>
-                        <td className={styles.borde} key={pago.currency}> {pago.currency}</td>
-                        <td className={styles.borde} key={pago.monto_usd}> {pago.monto_usd}</td>
-                        <td className={styles.borde} key={pago.monto_bss}> {pago.monto_bss}</td>
+                        <td className={styles.borde} key={gasto.pago_id}>{gasto.gasto_id}</td>
+                        <td className={styles.borde} key={gasto.gasto_desc}> {gasto.gasto_desc}</td>
+                        <td className={styles.borde} key={gasto.apartamento_id}> {gasto.apartamento_id}</td>
+                        <td className={styles.borde} key={gasto.monto_apartamento}> {gasto.monto_apartamento}</td>
 
                     </tr>
                     </tbody>
@@ -310,17 +467,23 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
 
         ))
 
+
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [openA, setOpenA] = React.useState(false);
+    const [openTipoP, setOpenTipoP] = React.useState(false);
     const [id, setId] = useState([]);
 
 
     const handleOpen = () => {
         setOpen(true);
+        setOpenA(true);
     };
 
     const handleClose = () => {
         setOpen(false);
+        setOpenA(false);
+        setOpenTipoP(false);
     };
 
 
@@ -342,13 +505,45 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
             <Table striped bordered hover >
                 <thead>
                 <tr className={styles.border}>
-                    <th className={styles.border}>Factura ID</th>
-                    <th className={styles.border}>Monto total</th>
-                    <th className={styles.border}>Estatus</th>
+                    <th className={styles.border}>Apartamento ID</th>
+                    <th className={styles.border}>Nombre</th>
+                    <th className={styles.border}>Alicuota</th>
+                    <th className={styles.border}>Dimensiones</th>
                 </tr>
                 </thead>
-                {info && facturas(info)}
-                </Table>
+                {apt && apartamentos(apt)}
+            </Table>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openA}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={openA}>
+                    <div className={classes.paper}>
+                        <h2 id="transition-modal-title">Facturas</h2>
+
+                        <Table striped bordered hover >
+                            <thead>
+                            <tr className={styles.border}>
+                                <th className={styles.border}>Factura ID</th>
+                                <th className={styles.border}>Apartamento ID</th>
+                                <th className={styles.border}>Monto total</th>
+                                <th className={styles.border}>Estatus</th>
+                            </tr>
+                            </thead>
+                            {info && facturas(info)}
+                        </Table>
+                    </div>
+                </Fade>
+            </Modal>
+
             <div className={styles.inicio}>
 
                 <Modal
@@ -365,19 +560,48 @@ async function getTipoPago() { //Función asincrona para consumir datos de la AP
                 >
                     <Fade in={open}>
                         <div className={classes.paper}>
-                            <h2 id="transition-modal-title">Pagos factura {id}</h2>
+                            <h2 id="transition-modal-title">Gastos factura {fID}</h2>
 
                             <Table striped bordered hover >
                                 <thead>
                                 <tr className={styles.border}>
-                                    <th className={styles.border}>Pago ID</th>
+                                    <th className={styles.border}>Gasto ID</th>
                                     <th className={styles.border}>Descripcion</th>
-                                    <th className={styles.border}>Moneda</th>
-                                    <th className={styles.border}>Monto ($)</th>
-                                    <th className={styles.border}>Monto (BsS)</th>
+                                    <th className={styles.border}>Apartamento ID</th>
+                                    <th className={styles.border}>Monto</th>
                                 </tr>
                                 </thead>
-                                {pagos && pagar(pagos)}
+                                {gastos && g(gastos)}
+                            </Table>
+                        </div>
+                    </Fade>
+                </Modal>
+
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={openTipoP}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={openTipoP}>
+                        <div className={classes.paper}>
+                            <h2 id="transition-modal-title">Tipos de pagos</h2>
+
+                            <Table striped bordered hover >
+                                <thead>
+                                <tr className={styles.border}>
+                                    <th className={styles.border}>Tipo de Pago ID</th>
+                                    <th className={styles.border}>Descripcion</th>
+                                    <th className={styles.border}>Moneda</th>
+                                </tr>
+                                </thead>
+                                {tipoPago && t(tipoPago)}
                             </Table>
                         </div>
                     </Fade>
