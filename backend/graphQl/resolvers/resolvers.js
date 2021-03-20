@@ -76,7 +76,7 @@ const resolvers ={
         },
 
         async getCondominio(root, args, {models}) {
-            if (args.usuario_id && !args.nombre) {          // TODO El usuario_id lo obtego de la sesion activa
+            if (args.usuario_id && !args.nombre) {
                 return models.condominio.findOne({
                     where: {
                         usuario_id: args.usuario_id,
@@ -113,7 +113,7 @@ const resolvers ={
         },
 
         async getEdificio(root, args, {models}) {
-            if (args.condominio_id && !args.nombre) {    //TODO para buscar edificio debo selceccionar el condominio y ahi agarro el condominio_id
+            if (args.condominio_id && !args.nombre) {
                 return models.edificio.findOne({
                     where: {
                         condominio_id: args.condominio_id,
@@ -148,7 +148,7 @@ const resolvers ={
         },
 
         async getApartamento(root, args, {models}) {
-            if (args.edificio_id && !args.nombre) {   //TODO para buscar apartamento debo selceccionar el edificio y ahi agarro el edificio_id
+            if (args.edificio_id && !args.nombre) {
                 return models.apartamento.findOne({
                     where: {
                         edificio_id: args.edificio_id,
@@ -286,7 +286,7 @@ const resolvers ={
             return models.usuario.findByPk(args.usuario_id)
         },
 
-        async deleteCondominio(root, args, {models}){     // TODO al seleccionar el condominio puedo obtener el condominio_id
+        async deleteCondominio(root, args, {models}){
 
             const eliminado = {
                 eliminado: true
@@ -296,7 +296,7 @@ const resolvers ={
             return models.condominio.findByPk(args.condominio_id)
         },
 
-        async deleteEdificio(root, args, {models}){     // TODO al seleccionar el edificio puedo obtener el condominio_id
+        async deleteEdificio(root, args, {models}){
 
             const eliminado = {
                 eliminado: true
@@ -306,7 +306,7 @@ const resolvers ={
             return models.edificio.findByPk(args.edificio_id)
         },
 
-        async deleteApartamento(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
+        async deleteApartamento(root, args, {models}){
 
             const eliminado = {
                 eliminado: true
@@ -316,7 +316,7 @@ const resolvers ={
             return models.apartamento.findByPk(args.apartamento_id)
         },
 
-        async deleteAlquiler(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
+        async deleteAlquiler(root, args, {models}){
 
             const eliminado = {
                 eliminado: true
@@ -326,7 +326,7 @@ const resolvers ={
             return models.alquiler.findByPk(args.alquiler_id)
         },
 
-        async deletePago(root, args, {models}){     // TODO al seleccionar el apartamento puedo obtener el condominio_id
+        async deletePago(root, args, {models}){
 
             const eliminado = {
                 eliminado: true
@@ -336,7 +336,7 @@ const resolvers ={
             return models.pago.findByPk(args.pago_id)
         },
 
-        async updateUsuario(root, args, {models}){   //TODO en la vista de perfil de usuario cuando ya esta loggeado, ahi saco el usuario_id
+        async updateUsuario(root, args, {models}){
 
             const actualizacion = {
                 nombre:args.nombre,
@@ -348,13 +348,13 @@ const resolvers ={
             return models.usuario.findByPk(args.usuario_id)
         },
 
-        async updateCondominio(root, args, {models}){   //TODO en la vista de administrador, cuando ya esta loggeado, ahi saco el condominio_id
+        async updateCondominio(root, args, {models}){
 
             const actualizacion = {
                 nombre:args.nombre
             };
             console.log(actualizacion)
-            await models.condominio.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}}) //TODO el condominio_id lo obtengo cuando selecciono el condominio a modificar y le doy a modificar, ahi se ejecuta el getCondominio
+            await models.condominio.update(actualizacion, {where: {condominio_id:args.condominio_id, eliminado: false}})
             return models.condominio.findByPk(args.condominio_id)
         },
 
@@ -365,7 +365,7 @@ const resolvers ={
                 num_pisos:args.num_pisos
             };
             console.log(actualizacion)
-            await models.edificio.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}}) //TODO el edificio_id lo obtengo cuando selecciono el edificio a modificar y le doy a modificar, ahi se ejecuta el getEdificio
+            await models.edificio.update(actualizacion, {where: {edificio_id:args.edificio_id, eliminado: false}})
             return models.edificio.findByPk(args.edificio_id)
         },
 
@@ -378,7 +378,7 @@ const resolvers ={
                 dimensiones:args.dimensiones
             };
             console.log(actualizacion)
-            await models.apartamento.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}}) //TODO el apartamento_id lo obtengo cuando selecciono el apartamento a modificar y le doy a modificar, ahi se ejecuta el getApartamento
+            await models.apartamento.update(actualizacion, {where: {apartamento_id:args.apartamento_id, eliminado: false}})
             return models.apartamento.findByPk(args.apartamento_id)
         },
 
