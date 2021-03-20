@@ -69,7 +69,7 @@ const AdminFactura = () => {
 	async function getGastos() { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -94,7 +94,7 @@ const AdminFactura = () => {
 	async function getGastoEdificios() { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -120,7 +120,7 @@ const AdminFactura = () => {
 	async function getGastoApartamentos() { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -146,7 +146,7 @@ const AdminFactura = () => {
 	async function deleteGastoEdificio(gasto_id, edificio_id) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -170,7 +170,7 @@ const AdminFactura = () => {
 	async function deleteGastoApartamento(gasto_id, apartamento_id) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -194,7 +194,7 @@ const AdminFactura = () => {
 	async function createFactura(apartamento_id, monto_total) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -218,7 +218,7 @@ const AdminFactura = () => {
 	async function createGasto(descripcion, factura_id) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
@@ -239,17 +239,17 @@ const AdminFactura = () => {
 
 	};
 
-	async function createGastoEdificio(gasto_id, apartamento_id) { //Función asincrona para consumir datos de la API
+	async function createGastoEdificio(gasto_id, edificio_id) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 
 		const { data } = await client.mutate({ // Query de graphql
 			mutation: gql`
                             mutation{
-                                deleteGastoEdificio(gasto_id: ${gasto_id}, apartamento_id: ${apartamento_id}){
+                                deleteGastoEdificio(gasto_id: ${gasto_id}, edificio_id: ${edificio_id}){
                                     eliminado
                                 }
                               }
@@ -266,7 +266,7 @@ const AdminFactura = () => {
 	async function createGastoApartamento(gasto_id, apartamento_id, monto_apartamento) { //Función asincrona para consumir datos de la API
 
 		const client = new ApolloClient({ // Cliente de Apolo
-			uri: `http://localhost:9900/graphql`,
+			uri: `http://localhost:9800/graphql`,
 			cache: new InMemoryCache()
 		});
 

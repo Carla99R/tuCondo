@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {Spinner} from "react-bootstrap";
 import {ApolloClient, gql, InMemoryCache} from "@apollo/client";
 import styles from "../styles/landingPage.module.css";
 import Modal from "@material-ui/core/Modal";
@@ -14,7 +7,6 @@ import Backdrop from "@material-ui/core/Backdrop";
 import {makeStyles} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import NavbarAdmin from "../components/navbarAdmin";
-import Image from "next/image";
 import {useForm} from "react-hook-form";
 import {TextField} from "@material-ui/core";
 
@@ -78,14 +70,6 @@ import {TextField} from "@material-ui/core";
             setInfo(response.getCondominios);
     
         };
-
-
-
-
-
-
-
-
 
 
         const condominios =(info)=>(
@@ -202,16 +186,6 @@ import {TextField} from "@material-ui/core";
 
 
 
-
-
-
-
-
-
-
-
-
-
          const usuario = async(interdata) => {
 
              const info = await infoAdmin(usuario_id);
@@ -220,7 +194,7 @@ import {TextField} from "@material-ui/core";
          async function getCondominios(usuario_id) { //Función asincrona para consumir datos de la API
 
             const client = new ApolloClient({ // Cliente de Apolo
-                uri: `http://localhost:9900/graphql`,
+                uri: `http://localhost:9800/graphql`,
                 cache: new InMemoryCache()
             });
     
@@ -247,7 +221,7 @@ import {TextField} from "@material-ui/core";
         async function getEdificios(condominio_id) { //Función asincrona para consumir datos de la API
     
             const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
+            uri: `http://localhost:9800/graphql`,
             cache: new InMemoryCache()
         });
     
@@ -274,7 +248,7 @@ import {TextField} from "@material-ui/core";
         async function getApartamentos(edificio_id) { //Función asincrona para consumir datos de la API
     
             const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
+            uri: `http://localhost:9800/graphql`,
             cache: new InMemoryCache()
         });
     
@@ -302,7 +276,7 @@ import {TextField} from "@material-ui/core";
         async function deleteCondominio(condominio_id) { //Función asincrona para consumir datos de la API
     
             const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
+            uri: `http://localhost:9800/graphql`,
             cache: new InMemoryCache()
         });
     
@@ -327,7 +301,7 @@ import {TextField} from "@material-ui/core";
 
             console.log(nombre)
             const client = new ApolloClient({ // Cliente de Apolo
-                uri: `http://localhost:9900/graphql`,
+                uri: `http://localhost:9800/graphql`,
                 cache: new InMemoryCache()
             });
     
@@ -351,7 +325,7 @@ import {TextField} from "@material-ui/core";
         async function deleteEdificio(edificio_id) { //Función asincrona para consumir datos de la API
     
             const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
+            uri: `http://localhost:9800/graphql`,
             cache: new InMemoryCache()
         });
     
@@ -376,7 +350,7 @@ import {TextField} from "@material-ui/core";
 
             console.log(nombre)
             const client = new ApolloClient({ // Cliente de Apolo
-                uri: `http://localhost:9900/graphql`,
+                uri: `http://localhost:9800/graphql`,
                 cache: new InMemoryCache()
             });
     
@@ -401,7 +375,7 @@ import {TextField} from "@material-ui/core";
         async function deleteApartamento(apartamento_id) { //Función asincrona para consumir datos de la API
     
             const client = new ApolloClient({ // Cliente de Apolo
-            uri: `http://localhost:9900/graphql`,
+            uri: `http://localhost:9800/graphql`,
             cache: new InMemoryCache()
         });
     
@@ -428,7 +402,7 @@ import {TextField} from "@material-ui/core";
             console.log(alicuota)
             console.log(dimensiones)
             const client = new ApolloClient({ // Cliente de Apolo
-                uri: `http://localhost:9900/graphql`,
+                uri: `http://localhost:9800/graphql`,
                 cache: new InMemoryCache()
             });
     

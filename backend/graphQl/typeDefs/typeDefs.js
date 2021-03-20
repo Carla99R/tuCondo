@@ -46,11 +46,6 @@ const typeDefs = gql`
         tipo_pago_id: Int!,
         comprobante: Int!
     }
-
-    type TipoPago{
-        tipoPago_id: Int!,
-        descripcion: String!
-    }
     
     type Factura{
         factura_id: Int!,
@@ -77,6 +72,7 @@ const typeDefs = gql`
         descripcion: String!,
         precio_usd: Int!,
         estatus_id: Int!
+    }
     
     type TipoPago{
         tipo_pago_id: Int!,
@@ -115,7 +111,6 @@ const typeDefs = gql`
         getAlquileres(usuario_id: Int): [Alquiler]
         getTipoAlquileres: [TipoAlquiler]
         getEstatus(identificador: String): [Estatus]
-        getTipoPago: [TipoPago]
 
         getFacturas(apartamento_id: Int): [Factura]
         getGastos: [Gasto]
